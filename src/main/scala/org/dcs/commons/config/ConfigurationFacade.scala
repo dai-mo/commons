@@ -1,7 +1,7 @@
 package org.dcs.commons.config
 
 import org.slf4j.LoggerFactory
-import org.dcs.commons.yaml.YamlSerializerImplicits._
+import org.dcs.commons.YamlSerializerImplicits._
 import java.io.File
 
 class ConfigurationFacade {}

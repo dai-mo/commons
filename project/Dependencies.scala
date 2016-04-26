@@ -3,6 +3,7 @@ import sbt._
 object Dependencies {
 
 	    // Versions	    
+      lazy val dcsTestVersion   = "1.0.0-SNAPSHOT"
 	    lazy val servletVersion   = "3.1.0"
 	    lazy val felixVersion     = "5.4.0"
 	    lazy val cxfDosgiVersion  = "1.7.0"
@@ -17,6 +18,7 @@ object Dependencies {
 
 
 			// Libraries			
+			val dcsTest         = "org.dcs"                          % "org.dcs.test"                       % dcsTestVersion 
 			val servletApi      = "javax.servlet"                    % "javax.servlet-api"                  % servletVersion
 			val felix           = "org.apache.felix"                 % "org.apache.felix.framework"         % felixVersion
 			val cxfDosgi        = "org.apache.cxf.dosgi"             % "cxf-dosgi-ri-dsw-cxf"               % cxfDosgiVersion  
@@ -54,7 +56,6 @@ object Dependencies {
 					jksonDataFormat,
 					jksonScala,
 					
-					scalaTest       % "test",
-					junitInterface  % "test"
+					dcsTest       % "test"
 					)  
 }

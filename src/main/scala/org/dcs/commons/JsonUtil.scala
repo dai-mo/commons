@@ -1,4 +1,4 @@
-package org.dcs.commons.json
+package org.dcs.commons
 
 import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper

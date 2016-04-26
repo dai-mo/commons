@@ -1,4 +1,4 @@
-package org.dcs.commons.yaml
+package org.dcs.commons
 
 import java.io.InputStream
 import java.io.File
