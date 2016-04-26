@@ -2,8 +2,8 @@ package org.dcs.commons.json
 
 import org.slf4j.LoggerFactory
 import org.dcs.commons.CommonsBaseUnitSpec
+import org.dcs.commons.JsonSerializerImplicits._;
 import org.scalatest.FlatSpec
-import org.dcs.commons.json.JsonSerializerImplicits._
 
 class JsonUtilSpec extends CommonsBaseUnitSpec with JsonUtilBehaviors {
   

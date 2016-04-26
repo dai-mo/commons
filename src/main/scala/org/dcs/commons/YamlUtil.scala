@@ -1,10 +1,9 @@
-package org.dcs.commons.yaml
+package org.dcs.commons
 
-import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import java.io.InputStream
-import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import java.io.File
 

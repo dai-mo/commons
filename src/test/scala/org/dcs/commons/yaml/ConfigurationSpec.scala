@@ -3,7 +3,7 @@ package org.dcs.commons.yaml
 import org.slf4j.LoggerFactory
 import org.dcs.commons.CommonsBaseUnitSpec
 import org.scalatest.FlatSpec
-import org.dcs.commons.yaml.YamlSerializerImplicits._
+import org.dcs.commons.YamlSerializerImplicits._
 import java.io.File
 import org.dcs.commons.config.YamlConfiguration
 import org.dcs.commons.config.ConfigurationFacade

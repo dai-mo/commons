@@ -1,4 +1,4 @@
-package org.dcs.commons.json
+package org.dcs.commons
 
 import java.io.InputStream
 
