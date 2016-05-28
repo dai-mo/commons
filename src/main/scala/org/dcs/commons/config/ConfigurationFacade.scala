@@ -40,5 +40,6 @@ object ConfigurationFacade {
 }
 
 class YamlConfiguration {
-  var zookeeperServers: String = "localhost:2181";
+  var zookeeperServers = "localhost:2181"
+  var nifiBaseUrl = "http://localhost:8888/nifi-api"
 }

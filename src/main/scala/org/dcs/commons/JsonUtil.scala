@@ -1,6 +1,6 @@
 package org.dcs.commons
 
-import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
+import com.fasterxml.jackson.databind.{ DeserializationFeature, ObjectMapper }
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import java.io.InputStream
@@ -13,20 +13,26 @@ object JsonUtil {
   mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
 
   def toJson(value: Map[Symbol, Any]): String = {
-    toJson(value map { case (k,v) => k.name -> v})
+    toJson(value map { case (k, v) => k.name -> v })
   }
 
   def toJson(value: Any): String = {
     mapper.writeValueAsString(value)
   }
 
-  def toMap[V](json:String)(implicit m: Manifest[V]) = toObject[Map[String,V]](json)
+  def toMap[V](json: String)(implicit m: Manifest[V]) = toObject[Map[String, V]](json)
 
-  def toObject[T](json: String)(implicit m : Manifest[T]): T = {
+  def toObject[T](json: String)(implicit m: Manifest[T]): T = {
     mapper.readValue[T](json)
   }
-  
-  def toObject[T](is: InputStream)(implicit m : Manifest[T]): T = {
+
+  def toObject[T](is: InputStream)(implicit m: Manifest[T]): T = {
     mapper.readValue[T](is)
+  }
+
+  def prettyPrint(json: String)  {
+    val mapper: ObjectMapper = new ObjectMapper()
+    val prettyJson: Object  = mapper.readValue(json, classOf[Object])
+    println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(prettyJson))
   }
 }
