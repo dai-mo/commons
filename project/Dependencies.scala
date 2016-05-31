@@ -33,6 +33,7 @@ object Dependencies {
 			val jksonDatabind   = "com.fasterxml.jackson.core"       % "jackson-databind"                   % jacksonVersion
 			val jksonCore       = "com.fasterxml.jackson.core"       % "jackson-core"                       % jacksonVersion
 			val jksonDataFormat = "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml"            % jacksonVersion
+			val jksonJaxb				= "com.fasterxml.jackson.module"		 % "jackson-module-jaxb-annotations"		% jacksonVersion
 			val jksonScala      = "com.fasterxml.jackson.module"     %% "jackson-module-scala"              % jacksonVersion
 
 			val scalaTest       = "org.scalatest"                    %% "scalatest"                         % scalaTestVersion
@@ -46,6 +47,7 @@ object Dependencies {
 					jksonCore,
 					jksonDatabind,
 					jksonDataFormat,
+					jksonJaxb,
 					jksonScala,
 
 					dcsTest       % "test"
