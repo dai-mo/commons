@@ -2,8 +2,10 @@ package org.dcs.commons.json
 
 import org.slf4j.LoggerFactory
 import org.dcs.commons.CommonsBaseUnitSpec
-import org.dcs.commons.JsonSerializerImplicits._;
+import org.dcs.commons.JsonSerializerImplicits._
 import org.scalatest.FlatSpec
+
+import scala.beans.BeanProperty
 
 class JsonUtilSpec extends CommonsBaseUnitSpec with JsonUtilBehaviors {
   
@@ -22,8 +24,7 @@ object JsonUtilSpec {
 
   val jsonString = "{\"a\":\"" + Valuea + "\"}"
   
-  val jsonObject = new TestJsonObject
-  jsonObject.a = Valuea
+  val jsonObject = TestJsonObject(Valuea)
   
   val is = this.getClass.getResourceAsStream("/test.json")
 }
@@ -43,7 +44,6 @@ trait JsonUtilBehaviors { this: FlatSpec =>
   }
 }
 
-class TestJsonObject() {
-  var a: String = _
-
+case class TestJsonObject(@BeanProperty var a: String) {
+  def this() = this("")
 }
