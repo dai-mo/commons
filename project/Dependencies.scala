@@ -2,6 +2,7 @@ import sbt._
 
 object Dependencies {
 
+      lazy val scVersion     = "2.11.7"
 	    // Versions
       lazy val dcsTestVersion   = "1.0.0-SNAPSHOT"
 	    lazy val servletVersion   = "3.1.0"
@@ -14,7 +15,7 @@ object Dependencies {
 			lazy val zookeeperVersion = "3.4.7"
 			lazy val scalaTestVersion = "2.2.6"
 			lazy val juiVersion       = "0.11"
-			lazy val jacksonVersion   = "2.4.5"
+			lazy val jacksonVersion   = "2.7.2"
 
 
 			// Libraries
@@ -35,14 +36,14 @@ object Dependencies {
 			val jksonDataFormat = "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml"            % jacksonVersion
 			val jksonJaxb				= "com.fasterxml.jackson.module"		 % "jackson-module-jaxb-annotations"		% jacksonVersion
 			val jksonScala      = "com.fasterxml.jackson.module"     %% "jackson-module-scala"              % jacksonVersion
-
+      val scalaReflect    = "org.scala-lang"                   % "scala-reflect"                      % scVersion
 			val scalaTest       = "org.scalatest"                    %% "scalatest"                         % scalaTestVersion
 			val junitInterface  = "com.novocode"                     % "junit-interface"                    % juiVersion
 
 			// Dependencies
 			val commonsDependencies = Seq(
-					logbackCore,
-					logbackClassic,
+					logbackCore     % "provided",
+					logbackClassic  % "provided",
 
 					jksonCore,
 					jksonDatabind,
@@ -50,6 +51,6 @@ object Dependencies {
 					jksonJaxb,
 					jksonScala,
 
-					dcsTest       % "test"
+					dcsTest         % "test"
 					)
 }
