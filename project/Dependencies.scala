@@ -4,7 +4,7 @@ object Dependencies {
 
       lazy val scVersion     = "2.11.7"
 	    // Versions
-      lazy val dcsTestVersion   = "1.0.0-SNAPSHOT"
+      lazy val dcsTestVersion   = "0.1.0"
 	    lazy val servletVersion   = "3.1.0"
 	    lazy val felixVersion     = "5.4.0"
 	    lazy val cxfDosgiVersion  = "1.7.0"
