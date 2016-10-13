@@ -10,8 +10,8 @@ object JsonSerializerImplicits {
     def toJsonP = JsonUtil.prettyPrint(jsonString)
   }
   
-  implicit class InputStreamToObject(yamlInputStream: InputStream) {
-    def toObject[T]()(implicit m: Manifest[T]): T =  JsonUtil.toObject[T](yamlInputStream)
+  implicit class InputStreamToObject(jsonInputStream: InputStream) {
+    def toObject[T]()(implicit m: Manifest[T]): T =  JsonUtil.toObject[T](jsonInputStream)
   }
 
   implicit class ObjectToString(jsonObject: Any) {
