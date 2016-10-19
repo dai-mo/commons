@@ -1,23 +1,24 @@
 package org.dcs.commons.yaml
 
-import org.slf4j.LoggerFactory
-import org.dcs.commons.CommonsBaseUnitSpec
-import org.scalatest.FlatSpec
-import org.dcs.commons.YamlSerializerImplicits._
 import java.io.File
-import org.dcs.commons.config.YamlConfiguration
-import org.dcs.commons.config.ConfigurationFacade
+import org.dcs.commons.YamlSerializerImplicits._
+import org.dcs.commons.CommonsBaseUnitSpec
+import org.dcs.commons.config.{GlobalConfiguration, GlobalConfigurator}
+import org.scalatest.FlatSpec
+import org.slf4j.LoggerFactory
 
 
 class ConfigurationSpec extends CommonsBaseUnitSpec with ConfigurationBehaviors {
   
   System.setProperty("config", this.getClass.getResource("/config.yaml").getPath)
   
-  "Loaded Configuration from Default" should behave like validConfigurationObject(ConfigurationFacade.defaultConfig)
+  "Loaded Configuration from Default" should
+    behave like validConfigurationObject(GlobalConfigurator.defaultConfig().toObject[GlobalConfiguration])
   
-  "Loaded Configuration from System Property" should behave like validConfigurationObject(ConfigurationFacade.customConfig)
+  "Loaded Configuration from System Property" should
+    behave like validConfigurationObject(GlobalConfigurator.customConfig().toObject[GlobalConfiguration])
   
-  "Loaded Configuration" should behave like validConfigurationObject(ConfigurationFacade.config)
+  "Loaded Configuration" should behave like validConfigurationObject(GlobalConfigurator.config().toObject[GlobalConfiguration])
 }
 
 object ConfigurationSpec {
@@ -28,9 +29,9 @@ object ConfigurationSpec {
 
 trait ConfigurationBehaviors { this: FlatSpec =>
 
-  def validConfigurationObject(yc: YamlConfiguration) {
+  def validConfigurationObject(gc: GlobalConfiguration) {
     it should "be valid" in {
-      assert(yc.zookeeperServers == "localhost:2282")
+      assert(gc.zookeeperServers == "localhost:2282")
     }
   }
 
