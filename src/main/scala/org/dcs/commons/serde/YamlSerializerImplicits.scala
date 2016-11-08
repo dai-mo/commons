@@ -1,7 +1,6 @@
-package org.dcs.commons
+package org.dcs.commons.serde
 
-import java.io.InputStream
-import java.io.File
+import java.io.{File, InputStream}
 
 object YamlSerializerImplicits {
   implicit class StringToObject(yamlString: String) {

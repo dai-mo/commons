@@ -1,13 +1,13 @@
-package org.dcs.commons
+package org.dcs.commons.serde
 
-import com.fasterxml.jackson.databind.{AnnotationIntrospector, DeserializationFeature, ObjectMapper}
-import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import java.io.InputStream
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector
+import com.fasterxml.jackson.databind.{AnnotationIntrospector, DeserializationFeature, ObjectMapper}
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 
 object JsonUtil {
   val mapper = new ObjectMapper() with ScalaObjectMapper

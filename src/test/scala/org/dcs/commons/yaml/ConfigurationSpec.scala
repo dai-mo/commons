@@ -1,7 +1,7 @@
 package org.dcs.commons.yaml
 
 import java.io.File
-import org.dcs.commons.YamlSerializerImplicits._
+import org.dcs.commons.serde.YamlSerializerImplicits._
 import org.dcs.commons.CommonsBaseUnitSpec
 import org.dcs.commons.config.{GlobalConfiguration, GlobalConfigurator}
 import org.scalatest.FlatSpec

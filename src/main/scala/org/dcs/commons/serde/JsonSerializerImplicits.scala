@@ -1,4 +1,4 @@
-package org.dcs.commons
+package org.dcs.commons.serde
 
 import java.io.InputStream
 
