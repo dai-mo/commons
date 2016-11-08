@@ -9,6 +9,7 @@ object Dependencies {
 			lazy val jacksonVersion   = "2.8.2"
 			lazy val scalaTestVersion = "2.2.6"
 			lazy val juiVersion       = "0.11"
+			lazy val akkaVersion      = "2.4.4"
 
 			// Libraries
 			val dcsTest         = "org.dcs"                          % "org.dcs.test"                       % dcsTestVersion
@@ -20,11 +21,16 @@ object Dependencies {
 			val jksonJaxb				= "com.fasterxml.jackson.module"		 % "jackson-module-jaxb-annotations"		% jacksonVersion
       val jksonScala      = "com.fasterxml.jackson.module"     %% "jackson-module-scala"              % jacksonVersion
 			val playWs          = "com.typesafe.play"                %% "play-ws"                           % playVersion
+			val akkaActor 			= "com.typesafe.akka" 							 %% "akka-actor" 												% akkaVersion
 
 			val scalaTest       = "org.scalatest"                    %% "scalatest"                         % scalaTestVersion
 			val junitInterface  = "com.novocode"                     % "junit-interface"                    % juiVersion
 
-			// Dependencies
+
+
+
+
+	// Dependencies
 			val commonsDependencies = Seq(
 					logbackCore     % "provided",
 					logbackClassic  % "provided",
@@ -34,6 +40,7 @@ object Dependencies {
 					jksonDataFormat,
 					jksonJaxb,
 					jksonScala,
+					akkaActor,
 					playWs,
 
 					dcsTest         % "test"
