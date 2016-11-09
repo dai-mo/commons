@@ -2,7 +2,7 @@ package org.dcs.commons.json
 
 import org.slf4j.LoggerFactory
 import org.dcs.commons.CommonsBaseUnitSpec
-import org.dcs.commons.JsonSerializerImplicits._
+import org.dcs.commons.serde.JsonSerializerImplicits._
 import org.scalatest.FlatSpec
 
 import scala.beans.BeanProperty

@@ -1,11 +1,11 @@
-package org.dcs.commons
+package org.dcs.commons.serde
+
+import java.io.{File, InputStream}
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import java.io.InputStream
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import java.io.File
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 
 object YamlUtil {
   val mapper = new ObjectMapper(new YAMLFactory()) with ScalaObjectMapper
