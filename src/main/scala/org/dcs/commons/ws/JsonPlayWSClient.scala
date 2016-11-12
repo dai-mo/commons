@@ -7,9 +7,9 @@ package org.dcs.commons.ws
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import org.dcs.commons.serde.JsonSerializerImplicits._
-import org.dcs.commons.error.RESTException
+import org.dcs.commons.error.{ErrorResponse, RESTException}
 import play.api.http.MimeTypes
-import play.api.libs.ws.WSResponse
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.libs.ws.ahc.AhcWSClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -26,109 +26,129 @@ trait JsonPlayWSClient extends ApiConfig {
     ("Content-Type", MimeTypes.JSON) :: Nil
   }
 
-  def get(path: String,
-          queryParams: List[(String, String)] = List(),
-          headers: List[(String, String)] = List()): Future[WSResponse] = {
+  private def request(path: String,
+                      queryParams: List[(String, String)] = List(),
+                      headers: List[(String, String)] = List()): WSRequest =
     wsClient.url(endpoint(path))
       .withQueryString(queryParams:_*)
       .withHeaders(headers:_*)
+
+
+  private def responseOrError(response: WSResponse): Either[ErrorResponse, WSResponse] =
+    if(response.status >= 400 && response.status < 600)
+      Left(error(response.status, response.body))
+    else
+      Right(response)
+
+
+  private def responseOrException(response: WSResponse): WSResponse =
+    if(response.status >= 400 && response.status < 600)
+      throw new RESTException(error(response.status, response.body))
+    else
+      response
+
+
+  def getAsEither(path: String,
+                  queryParams: List[(String, String)] = List(),
+                  headers: List[(String, String)] = List()): Future[Either[ErrorResponse, WSResponse]] =
+    request(path, queryParams, headers)
       .get
-      .map { response =>
-        if(response.status >= 400 && response.status < 600)
-          throw new RESTException(error(response.status, response.body))
-        else
-          response
-      }
-  }
+      .map(responseOrError)
+
+
+  def get(path: String,
+          queryParams: List[(String, String)] = List(),
+          headers: List[(String, String)] = List()): Future[WSResponse] =
+    request(path, queryParams, headers)
+      .get
+      .map(responseOrException)
+
 
 
   def getAsJson(path: String,
                 queryParams: List[(String, String)] = List(),
-                headers: List[(String, String)] = List()): Future[String] = {
+                headers: List[(String, String)] = List()): Future[String] =
     get(path, queryParams, headers)
-      .map { response =>
-        response.json.toString
-      }
-  }
+      .map(_.json.toString)
+
+
+
+  def putAsEither[B](path: String,
+             body: B = AnyRef,
+             queryParams: List[(String, String)] = List(),
+             headers: List[(String, String)] = List()): Future[Either[ErrorResponse, WSResponse]] =
+    request(path, queryParams, headers)
+      .put(body.toJson)
+      .map(responseOrError)
 
 
   def put[B](path: String,
              body: B = AnyRef,
              queryParams: List[(String, String)] = List(),
-             headers: List[(String, String)] = List()): Future[WSResponse] = {
-    wsClient.url(endpoint(path))
-      .withQueryString(queryParams:_*)
-      .withHeaders(defaultHeaders() ++ headers:_*)
+             headers: List[(String, String)] = List()): Future[WSResponse] =
+    request(path, queryParams, headers)
       .put(body.toJson)
-      .map { response =>
-        if(response.status >= 400 && response.status < 600)
-          throw new RESTException(error(response.status, response.body))
-        else
-          response
-      }
-  }
+      .map(responseOrException)
+
 
 
   def putAsJson[B](path: String,
                    body: B = AnyRef,
                    queryParams: List[(String, String)] = List(),
-                   headers: List[(String, String)] = List()): Future[String] = {
+                   headers: List[(String, String)] = List()): Future[String] =
     put(path, body, queryParams, headers)
-      .map { response =>
-        response.json.toString
-      }
-  }
+      .map(_.json.toString)
+
+
+  def postAsEither[B](path: String,
+              body: B = AnyRef,
+              queryParams: List[(String, String)] = List(),
+              headers: List[(String, String)] = List()): Future[Either[ErrorResponse, WSResponse]] =
+    request(endpoint(path), queryParams, headers)
+      .post(body.toJson)
+      .map(responseOrError)
+
 
   def post[B](path: String,
               body: B = AnyRef,
               queryParams: List[(String, String)] = List(),
-              headers: List[(String, String)] = List()): Future[WSResponse] = {
-    wsClient.url(endpoint(path))
-      .withQueryString(queryParams:_*)
-      .withHeaders(defaultHeaders() ++ headers:_*)
+              headers: List[(String, String)] = List()): Future[WSResponse] =
+    request(endpoint(path), queryParams, headers)
       .post(body.toJson)
-      .map { response =>
-        if(response.status >= 400 && response.status < 600)
-          throw new RESTException(error(response.status, response.body))
-        else
-          response
-      }
-  }
+      .map(responseOrException)
+
 
 
   def postAsJson[B](path: String,
                     body: B = AnyRef,
                     queryParams: List[(String, String)] = List(),
-                    headers: List[(String, String)] = List()): Future[String] = {
+                    headers: List[(String, String)] = List()): Future[String] =
     post(path, body, queryParams, headers)
-      .map { response =>
-        response.json.toString
-      }
-  }
+      .map(_.json.toString)
+
+
+  def deleteAsEither(path: String,
+             queryParams: List[(String, String)] = List(),
+             headers: List[(String, String)] = List()): Future[Either[ErrorResponse, WSResponse]] =
+    request(endpoint(path), queryParams, headers)
+      .delete
+      .map(responseOrError)
+
 
   def delete(path: String,
              queryParams: List[(String, String)] = List(),
-             headers: List[(String, String)] = List()): Future[WSResponse] = {
-    wsClient.url(endpoint(path))
-      .withQueryString(queryParams:_*)
-      .withHeaders(headers:_*)
+             headers: List[(String, String)] = List()): Future[WSResponse] =
+    request(endpoint(path), queryParams, headers)
       .delete
-      .map { response =>
-        if(response.status >= 400 && response.status < 600)
-          throw new RESTException(error(response.status, response.body))
-        else
-          response
-      }
-  }
+      .map(responseOrException)
+
 
 
   def deleteAsJson(path: String,
                    queryParams: List[(String, String)] = List(),
-                   headers: List[(String, String)] = List()): Future[String] = {
+                   headers: List[(String, String)] = List()): Future[String] =
     delete(path, queryParams, headers)
-      .map { response =>
-        response.json.toString
-      }
-  }
+      .map(_.json.toString)
+
 
 }

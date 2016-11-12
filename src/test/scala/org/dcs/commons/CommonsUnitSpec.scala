@@ -6,7 +6,7 @@ import org.scalatest.junit.JUnitRunner
 import org.mockito.runners.MockitoJUnitRunner
 import org.scalatest.junit.JUnitSuite
 
-abstract class CommonsBaseUnitSpec extends FlatSpec
+abstract class CommonsUnitSpec extends FlatSpec
   with Matchers
   with OptionValues
   with Inside

@@ -11,6 +11,13 @@ package org.dcs.commons.error
   * Created by cmathew on 05/06/16.
   */
 object ErrorConstants {
+  val GlobalGeneralErrorCode = "DCS000"
+  val GlobalDataErrorCode = "DCS100"
+  val GlobalServiceErrorCode = "DCS200"
+  val GlobalFlowErrorCode = "DCS300"
+  val GlobalClientErrorCode = "DCS400"
+  val GlobalDSecurityErrorCode = "DCS500"
+
   val UnknownErrorResponse = ErrorResponse("DCS001", "Unknown error", 500)
 
   /*
@@ -18,10 +25,6 @@ object ErrorConstants {
    */
   val DCS001 = UnknownErrorResponse
   val DCS002 =  ErrorResponse("DCS002", "Unexpected Error", 500)
-
-  /*
-    Unauthorised request
-   */
   val DCS003 =  ErrorResponse("DCS003", "Request is not authorised", 401)
 
   /*

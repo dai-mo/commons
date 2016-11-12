@@ -15,7 +15,9 @@ lazy val commons = (project in file(".")).
     name := projectName,
     moduleName := name.value,
     libraryDependencies ++= commonsDependencies
-  )
+  ).
+  settings(Seq(unmanagedSourceDirectories in Compile += baseDirectory.value / "generated" / "src" / "main" / "java",
+    unmanagedSourceDirectories in Test += baseDirectory.value / "generated" / "src" / "test" / "java"))
 
 // ------- Versioning , Release Section --------
 
