@@ -10,6 +10,7 @@ import javax.ws.rs.client.{ClientBuilder, ClientRequestFilter, Entity}
 import javax.ws.rs.core.{MediaType, Response}
 
 import org.dcs.commons.error.{ErrorResponse, RESTException}
+import org.dcs.commons.serde.JsonSerializerImplicits._
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -48,6 +49,13 @@ trait JerseyRestClient extends ApiConfig {
     else
       response
 
+
+  private def entity[T](obj: T, contentType: String): Entity[String] = contentType match {
+    case MediaType.APPLICATION_JSON => Entity.entity(obj.toJson, contentType)
+    case _ => Entity.entity(obj.toString, contentType)
+  }
+
+
   def getAsEither(path: String,
                   queryParams: List[(String, String)] = List(),
                   headers: List[(String, String)] = List()): Future[Either[ErrorResponse, Response]] =
@@ -77,7 +85,7 @@ trait JerseyRestClient extends ApiConfig {
                      headers: List[(String, String)] = List(),
                      contentType: String = MediaType.APPLICATION_JSON): Future[Either[ErrorResponse, Response]] =
     Future {
-      val res: Response = response(path, queryParams, headers).put(Entity.entity(body, contentType))
+      val res: Response = response(path, queryParams, headers).put(entity(body, contentType))
       responseOrError(res)
     }
 
@@ -87,7 +95,7 @@ trait JerseyRestClient extends ApiConfig {
              headers: List[(String, String)] = List(),
              contentType: String = MediaType.APPLICATION_JSON): Future[Response] =
     Future {
-      val res: Response = response(path, queryParams, headers).put(Entity.entity(body, contentType))
+      val res: Response = response(path, queryParams, headers).put(entity(body, contentType))
       responseOrException(res)
     }
 
@@ -105,7 +113,7 @@ trait JerseyRestClient extends ApiConfig {
                       headers: List[(String, String)] = List(),
                       contentType: String = MediaType.APPLICATION_JSON): Future[Either[ErrorResponse, Response]] =
     Future {
-      val res: Response = response(path, queryParams, headers).post(Entity.entity(body, contentType))
+      val res: Response = response(path, queryParams, headers).post(entity(body, contentType))
       responseOrError(res)
     }
 
@@ -115,7 +123,7 @@ trait JerseyRestClient extends ApiConfig {
               headers: List[(String, String)] = List(),
               contentType: String = MediaType.APPLICATION_JSON): Future[Response] =
     Future {
-      val res: Response = response(path, queryParams, headers).post(Entity.entity(body, contentType))
+      val res: Response = response(path, queryParams, headers).post(entity(body, contentType))
       responseOrException(res)
     }
 
@@ -151,4 +159,3 @@ trait JerseyRestClient extends ApiConfig {
 
 
 }
-

@@ -1,0 +1,11 @@
+{
+  "namespace": "org.dcs.processor",
+  "type": "record",
+  "name": "GBIFOccurrence",
+  "fields": [
+    {"name": "scientificName",   "type": ["null", "string"], "default": ""},
+    {"name": "decimalLongitude", "type": ["null", "double"], "default": -1},
+    {"name": "decimalLatitude",  "type": ["null", "double"], "default": -1},
+    {"name": "institutionCode",  "type": ["null", "string"], "default": ""}
+  ]
+}
