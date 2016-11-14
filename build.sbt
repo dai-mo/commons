@@ -5,23 +5,20 @@ import sbtbuildinfo.BuildInfoPlugin.autoImport._
 import sbtrelease.ReleasePlugin.autoImport._
 import sbtrelease._
 
-val projectName = "org.dcs.commons"
+lazy val commonsProjectName = "org.dcs.commons"
+lazy val commonsProjectID   = "commons"
+lazy val commonsProjectDir   = "."
 
-lazy val commons = (project in file(".")).
-  configs(IntegrationTest).
-  settings(commonSettings: _*).
-  settings(Defaults.itSettings: _*).
-  settings(
-    name := projectName,
-    moduleName := name.value,
-    libraryDependencies ++= commonsDependencies
-  )
+lazy val commons = OsgiProject(commonsProjectID, commonsProjectName, commonsProjectDir).
+  settings(libraryDependencies ++= commonsDependencies).
+  settings(Seq(unmanagedSourceDirectories in Compile += baseDirectory.value / "generated" / "src" / "main" / "java",
+    unmanagedSourceDirectories in Test += baseDirectory.value / "generated" / "src" / "test" / "java"))
 
 // ------- Versioning , Release Section --------
 
 // Build Info
 buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion)
-buildInfoPackage := projectName
+buildInfoPackage := commonsProjectName
 
 // Git
 showCurrentGitBranch

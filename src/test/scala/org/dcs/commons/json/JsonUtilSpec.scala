@@ -1,13 +1,13 @@
 package org.dcs.commons.json
 
 import org.slf4j.LoggerFactory
-import org.dcs.commons.CommonsBaseUnitSpec
+import org.dcs.commons.CommonsUnitSpec
 import org.dcs.commons.serde.JsonSerializerImplicits._
 import org.scalatest.FlatSpec
 
 import scala.beans.BeanProperty
 
-class JsonUtilSpec extends CommonsBaseUnitSpec with JsonUtilBehaviors {
+class JsonUtilSpec extends CommonsUnitSpec with JsonUtilBehaviors {
   
   "Loaded Json Object from String" should behave like validJsonObject(JsonUtilSpec.jsonString.toObject[TestJsonObject])
   

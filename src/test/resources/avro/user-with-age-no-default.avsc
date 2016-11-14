@@ -1,0 +1,11 @@
+{
+  "namespace": "org.dcs.data.model",
+  "type": "record",
+  "name": "UserWithAge",
+  "fields": [
+    {"name": "first_name", "type": "string"},
+    {"name": "middle_name",  "type": "string"},
+    {"name": "last_name", "type": "string"},
+    {"name": "age", "type": "int"}
+  ]
+}

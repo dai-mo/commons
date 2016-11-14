@@ -2,13 +2,13 @@ package org.dcs.commons.yaml
 
 import java.io.File
 import org.dcs.commons.serde.YamlSerializerImplicits._
-import org.dcs.commons.CommonsBaseUnitSpec
+import org.dcs.commons.CommonsUnitSpec
 import org.dcs.commons.config.{GlobalConfiguration, GlobalConfigurator}
 import org.scalatest.FlatSpec
 import org.slf4j.LoggerFactory
 
 
-class ConfigurationSpec extends CommonsBaseUnitSpec with ConfigurationBehaviors {
+class ConfigurationSpec extends CommonsUnitSpec with ConfigurationBehaviors {
   
   System.setProperty("config", this.getClass.getResource("/config.yaml").getPath)
   
