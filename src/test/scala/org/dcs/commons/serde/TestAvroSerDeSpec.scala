@@ -111,7 +111,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
       assert(data.get("age").asInstanceOf[Int] == defaultAge)
     }
 
-    val schemaForUser: Schema = AvroSchemaStore.get("user").get
+    val schemaForUser: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user.avsc"))
 
     val user = new GenericData.Record(schemaForUser)
     user.put("first_name", firstName)
@@ -120,7 +120,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
 
     val bytes = user.serToBytes(Some(schemaForUser))
 
-    val schemaForUserWithAge: Schema = AvroSchemaStore.get("user-with-age").get
+    val schemaForUserWithAge: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-with-age.avsc"))
 
     val data: GenericRecord = bytes.deSerToGenericRecord(Some(schemaForUser), Some(schemaForUserWithAge))
 
@@ -134,7 +134,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
     // and writer's schema does not have a field with the same name, an error is signalled.
 
 
-    val schemaForUser: Schema = AvroSchemaStore.get("user").get
+    val schemaForUser: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user.avsc"))
 
 
     val user = new GenericData.Record(schemaForUser)
@@ -144,7 +144,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
 
     val bytes: Array[Byte] = user.serToBytes(Some(schemaForUser))
 
-    val schemaForUserWithAge: Schema = AvroSchemaStore.get("user-with-age").get
+    val schemaForUserWithAge: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-with-age.avsc"))
 
     val data = bytes.deSerToGenericRecord(Some(schemaForUser), Some(schemaForUserWithAge))
 
@@ -164,7 +164,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
       assert(data.get("age") == null)
     }
 
-    val schemaForUserWithAge: Schema = AvroSchemaStore.get("user-with-age").get
+    val schemaForUserWithAge: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-with-age.avsc"))
 
     val user = new GenericData.Record(schemaForUserWithAge)
     user.put("first_name", firstName)
@@ -174,7 +174,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
 
     val bytes = user.serToBytes(Some(schemaForUserWithAge))
 
-    val schemaForUser: Schema = AvroSchemaStore.get("user").get
+    val schemaForUser: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user.avsc"))
 
     val data = bytes.deSerToGenericRecord(Some(schemaForUserWithAge), Some(schemaForUser))
 
@@ -195,7 +195,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
       assert(data.get("age") == null)
     }
 
-    val schemaForUser: Schema = AvroSchemaStore.get("user").get
+    val schemaForUser: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user.avsc"))
 
     val json = IOUtils.toString(this.getClass.getResourceAsStream("/user.json"), "UTF-8")
 
