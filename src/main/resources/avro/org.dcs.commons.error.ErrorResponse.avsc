@@ -1,0 +1,11 @@
+{
+  "namespace": "org.dcs.commons.error",
+  "type": "record",
+  "name": "ErrorResponse",
+  "fields": [
+    {"name": "code",   "type": "string"},
+    {"name": "message", "type": "string"},
+    {"name": "httpStatusCode",  "type": "int"},
+    {"name": "errorMessage",  "type": "string", "default": ""}
+  ]
+}

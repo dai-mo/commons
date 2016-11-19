@@ -33,9 +33,9 @@
                             <goal>schema</goal>
                         </goals>
                         <configuration>
-                            <sourceDirectory>${project.basedir}/src/main/resources/avro/</sourceDirectory>
+                            <sourceDirectory>${project.basedir}/src/main/resources/avro-gen/</sourceDirectory>
                             <outputDirectory>${project.basedir}/generated/src/main/java/</outputDirectory>
-                            <testSourceDirectory>${project.basedir}/src/test/resources/avro/</testSourceDirectory>
+                            <testSourceDirectory>${project.basedir}/src/test/resources/avro-gen/</testSourceDirectory>
                             <testOutputDirectory>${project.basedir}/generated/src/test/java/</testOutputDirectory>
                         </configuration>
                     </execution>
