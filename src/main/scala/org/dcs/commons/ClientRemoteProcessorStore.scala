@@ -18,4 +18,5 @@ object ClientRemoteProcessorStore {
   }
 
   add("org.dcs.nifi.processors.StatefulGBIFOccurrenceProcessor", "org.dcs.core.processor.GBIFOccurrenceProcessor")
+  add("org.dcs.nifi.processors.LatLongValidationProcessor", "org.dcs.core.processor.GBIFOccurrenceProcessor")
 }

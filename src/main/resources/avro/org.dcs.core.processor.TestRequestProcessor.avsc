@@ -1,0 +1,8 @@
+{
+  "namespace": "org.dcs.processor",
+  "type": "record",
+  "name": "TestRequest",
+  "fields": [
+    {"name": "request",   "type": ["null", "string"]}
+  ]
+}

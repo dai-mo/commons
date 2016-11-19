@@ -51,7 +51,8 @@ object ErrorConstants {
   val DCS302 = ErrorResponse("DCS302", "Access to flow entity is unauthorized", 401)
   val DCS303 = ErrorResponse("DCS303", "Access to flow entity is forbidden", 403)
   val DCS304 = ErrorResponse("DCS304", "Flow entity could not be found", 404)
-  val DCS305 = ErrorResponse("DCS305", "Inavlid request to process flow entity", 409)
+  val DCS305 = ErrorResponse("DCS305", "Invalid request to process flow entity", 409)
+  val DCS306 = ErrorResponse("DCS306", "Processor Error", 500)
 
   /*
     Web client errors

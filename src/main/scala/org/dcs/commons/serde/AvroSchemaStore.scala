@@ -11,9 +11,11 @@ object AvroSchemaStore {
 
   private val SchemaMap = mutable.Map[String, Schema]()
 
+  val ErrorResponseSchema = "org.dcs.commons.error.ErrorResponse"
+
   def add(key: String): Unit = {
     val is = this.getClass.getResourceAsStream("/avro/" + key + ".avsc")
-    if(is != null)
+    if (is != null)
       SchemaMap(key) = new Schema.Parser().parse(is)
   }
 
@@ -21,6 +23,13 @@ object AvroSchemaStore {
     SchemaMap.get(key)
   }
 
-  add("org.dcs.core.processor.GBIFOccurrenceProcessor")
+  add(ErrorResponseSchema)
 
+  add("org.dcs.core.processor.GBIFOccurrenceProcessor")
+  add("org.dcs.core.processor.TestResponseProcessor")
+  add("org.dcs.core.processor.TestRequestProcessor")
+
+  def errorResponseSchema(): Schema = {
+    SchemaMap(ErrorResponseSchema)
+  }
 }
