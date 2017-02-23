@@ -22,10 +22,6 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
   val age = 1024
   val defaultAge = -1
 
-  AvroSchemaStore.add("user")
-  AvroSchemaStore.add("user-with-age")
-  AvroSchemaStore.add("user-with-age")
-
 
   "Specific Avro Ser De" should "be valid for same reader writer schema when writing to file" in {
 
