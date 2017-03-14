@@ -26,7 +26,7 @@ object AvroSchemaStore {
   add(ErrorResponseSchema)
 
   add("org.dcs.core.processor.GBIFOccurrenceProcessor")
-  add("org.dcs.core.processor.TestResponseProcessor")
+  add("org.dcs.core.processor.TestProcessor")
   add("org.dcs.core.processor.TestRequestProcessor")
 
   def errorResponseSchema(): Schema = {

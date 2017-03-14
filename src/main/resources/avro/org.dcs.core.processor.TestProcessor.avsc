@@ -1,7 +1,7 @@
 {
   "namespace": "org.dcs.processor",
   "type": "record",
-  "name": "TestResponse",
+  "name": "Test",
   "fields": [
     {"name": "response",   "type": ["null", "string"]}
   ]
