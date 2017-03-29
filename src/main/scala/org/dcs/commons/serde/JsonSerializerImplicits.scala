@@ -5,9 +5,10 @@ import java.io.InputStream
 object JsonSerializerImplicits {
   implicit class StringToObject(jsonString: String) {
     def toMap: Map[String,Any] = JsonUtil.toMap(jsonString)
+    def asList[V]()(implicit m: Manifest[V]): List[V] = JsonUtil.toList[V](jsonString)
     def toMapOf[V]()(implicit m: Manifest[V]): Map[String,V] = JsonUtil.toMap[V](jsonString)
     def toObject[T]()(implicit m: Manifest[T]): T =  JsonUtil.toObject[T](jsonString)
-    def toJsonP = JsonUtil.prettyPrint(jsonString)
+    def toJsonP(): Unit = JsonUtil.prettyPrint(jsonString)
   }
   
   implicit class InputStreamToObject(jsonInputStream: InputStream) {
@@ -16,6 +17,7 @@ object JsonSerializerImplicits {
 
   implicit class ObjectToString(jsonObject: Any) {
     def toJson: String = JsonUtil.toJson(jsonObject)
-    def toJsonP = JsonUtil.prettyPrint(JsonUtil.toJson(jsonObject))
+    def toJsonP(): Unit = JsonUtil.prettyPrint(JsonUtil.toJson(jsonObject))
   }
+
 }
