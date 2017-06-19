@@ -3,7 +3,7 @@ package org.dcs.commons.serde
 import java.io.File
 
 import org.apache.commons.io.IOUtils
-import org.dcs.commons.CommonsUnitSpec
+import org.dcs.commons.{CommonsUnitSpec, SchemaAction, SchemaField}
 import org.dcs.data.model.{User, UserWithAge}
 
 import scala.collection.mutable
@@ -11,6 +11,7 @@ import AvroImplicits._
 import org.apache.avro.Schema
 import org.apache.avro.data.Json
 import org.apache.avro.generic.{GenericData, GenericRecord}
+import JsonSerializerImplicits._
 /**
   * Created by cmathew on 24.10.16.
   */
@@ -222,6 +223,94 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
     val data = bytes.deSerToJsonMap()
 
     assertUser(data)
+  }
+
+  "Avro Schema Update" should "work when deleting field" in {
+    val schemaForUser: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-complex.avsc"))
+
+    val MNameFieldName = "middle_name"
+    val AddressFieldName = "address"
+    val CityFieldName = "city"
+
+    val remMNameAction = SchemaAction(SchemaAction.SCHEMA_REM_ACTION,
+      JsonPath.Root + JsonPath.Sep + MNameFieldName)
+
+    val upSchema1 = schemaForUser.update(List(remMNameAction))
+    assert(Option(upSchema1.getField(MNameFieldName)).isEmpty)
+    assert(upSchema1.getFields.size() == 3)
+    assert(Option(upSchema1.getField(AddressFieldName).schema().getField(CityFieldName)).isDefined)
+
+    val remCityAction = SchemaAction(SchemaAction.SCHEMA_REM_ACTION,
+      JsonPath.Root + JsonPath.Sep + AddressFieldName + JsonPath.Sep + CityFieldName)
+
+    val upSchema2 = schemaForUser.update(List(remCityAction))
+    assert(Option(upSchema2.getField(AddressFieldName).schema().getField(CityFieldName)).isEmpty)
+
+    val remAddressAction = SchemaAction(SchemaAction.SCHEMA_REM_ACTION,
+      JsonPath.Root + JsonPath.Sep + AddressFieldName)
+
+    val upSchema3 = schemaForUser.update(List(remAddressAction))
+    assert(Option(upSchema3.getField(AddressFieldName)).isEmpty)
+  }
+
+  "Avro Schema Update" should "work when adding field" in {
+    val schemaForUser: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-complex.avsc"))
+
+    val TitleFieldName = "title"
+    val AddressFieldName = "address"
+    val PinCodeName = "pincode"
+
+    val addTitleAction1 = SchemaAction(SchemaAction.SCHEMA_ADD_ACTION,
+      JsonPath.Root,
+      SchemaField(TitleFieldName, Schema.Type.STRING.getName, "", ""))
+
+    val upSchema1 = schemaForUser.update(List(addTitleAction1))
+
+    assert(upSchema1.getFields.size() == 5)
+    assert(Option(upSchema1.getField(TitleFieldName)).isDefined)
+
+    val addPinCodeAction = SchemaAction(SchemaAction.SCHEMA_ADD_ACTION,
+      JsonPath.Root + JsonPath.Sep + AddressFieldName,
+      SchemaField(PinCodeName, Schema.Type.STRING.getName, "", ""))
+
+    val addTitleAction2 = SchemaAction(SchemaAction.SCHEMA_ADD_ACTION,
+      JsonPath.Root,
+      SchemaField(TitleFieldName, Schema.Type.STRING.getName, "", ""))
+
+    val upSchema2 = schemaForUser.update(List(addTitleAction2, addPinCodeAction))
+
+    assert(upSchema2.getFields.size() == 5)
+    assert(Option(upSchema2.getField(TitleFieldName)).isDefined)
+
+    assert(upSchema2.getField(AddressFieldName).schema().getFields.size() == 3)
+    assert(Option(upSchema2.getField(AddressFieldName).schema().getField(PinCodeName)).isDefined)
+
+  }
+
+  "Avro Schema Update" should "work when combining addition and deletion of field" in {
+
+    val schemaForUser: Schema =
+      new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-complex.avsc"))
+
+
+    val MNameFieldName = "middle_name"
+    val AddressFieldName = "address"
+    val CityFieldName = "city"
+    val PinCodeName = "pincode"
+
+    val remMNameAction = this.getClass.getResourceAsStream("/avro-gen/remMNameAction.json").toObject[SchemaAction]
+
+    val addPinCodeAction = this.getClass.getResourceAsStream("/avro-gen/addPincodeAction.json").toObject[SchemaAction]
+
+    val upSchema = schemaForUser.update(List(remMNameAction, addPinCodeAction))
+
+    assert(Option(upSchema.getField(MNameFieldName)).isEmpty)
+    assert(upSchema.getFields.size() == 3)
+    assert(Option(upSchema.getField(AddressFieldName).schema().getField(CityFieldName)).isDefined)
+
+    assert(upSchema.getField(AddressFieldName).schema().getFields.size() == 3)
+    assert(Option(upSchema.getField(AddressFieldName).schema().getField(PinCodeName)).isDefined)
+
   }
 
 }

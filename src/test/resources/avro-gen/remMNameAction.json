@@ -1,0 +1,4 @@
+{
+  "action":  "rem",
+  "avroPath": "$.middle_name"
+}
