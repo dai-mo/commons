@@ -319,4 +319,26 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
 
   }
 
+  "Avro Schema Path Validation" should "be consistent" in {
+
+    val schemaForUser: Schema =
+      new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-complex.avsc"))
+
+
+    val MNameFieldName = "middle_name"
+    val AddressFieldName = "address"
+    val CityFieldName = "city"
+    val PinCodeName = "pincode"
+
+    assert(SchemaField.validatePath(schemaForUser, JsonPath.Root + JsonPath.Sep + MNameFieldName))
+    assert(!SchemaField.validatePath(schemaForUser, JsonPath.Root + JsonPath.Sep + MNameFieldName + JsonPath.Sep + "initial"))
+
+    assert(SchemaField.validatePath(schemaForUser, JsonPath.Root + JsonPath.Sep + AddressFieldName + JsonPath.Sep + CityFieldName))
+    assert(!SchemaField.validatePath(schemaForUser, JsonPath.Root + JsonPath.Sep + AddressFieldName + JsonPath.Sep + PinCodeName))
+
+    assert(!SchemaField.validatePath(schemaForUser, JsonPath.Root + JsonPath.Sep))
+    assert(!SchemaField.validatePath(schemaForUser, ""))
+
+  }
+
 }

@@ -32,6 +32,23 @@ object SchemaField {
       schemaField.doc(),
       schemaField.defaultVal())
   }
+
+  def validatePath(schema: Schema, schemaPath: String): Boolean = {
+
+    def validatePath(currentSchema: Schema, path:List[String]): Boolean = path match {
+      case Nil  => if(currentSchema.getType != Schema.Type.RECORD) true else false
+      case _ if currentSchema.getType != Schema.Type.RECORD  => false
+      case _ => {
+        val field = currentSchema.getField(path.head)
+        if(field  == null)
+          false
+        else
+          validatePath(field.schema(), path.tail)
+      }
+    }
+
+    validatePath(schema, schemaPath.split("\\.").toList.tail)
+  }
 }
 case class SchemaField(@BeanProperty var name: String,
                        @BeanProperty var schemaType: String,
