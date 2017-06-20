@@ -3,7 +3,7 @@ package org.dcs.commons
 import org.scalatest._
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.junit.JUnitRunner
-import org.mockito.runners.MockitoJUnitRunner
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.junit.JUnitSuite
 
 abstract class CommonsUnitSpec extends FlatSpec

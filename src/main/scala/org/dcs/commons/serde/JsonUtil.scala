@@ -47,3 +47,8 @@ object JsonUtil {
     println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(prettyJson))
   }
 }
+
+object JsonPath {
+  val Root = "$"
+  val Sep = "."
+}

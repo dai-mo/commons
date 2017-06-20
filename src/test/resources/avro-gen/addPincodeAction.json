@@ -1,0 +1,10 @@
+{
+  "action":  "add",
+  "avroPath": "$.address",
+  "field": {
+    "name": "pincode",
+    "schemaType": "string",
+    "doc": "",
+    "defaultValue": ""
+  }
+}

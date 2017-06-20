@@ -9,9 +9,10 @@ import org.apache.avro.generic.{GenericDatumReader, GenericDatumWriter, GenericR
 import org.apache.avro.io._
 import org.apache.avro.specific.{SpecificDatumReader, SpecificDatumWriter}
 import org.dcs.commons.Control._
+import org.dcs.commons.SchemaAction
 
-import scala.collection.mutable
 import scala.collection.JavaConverters._
+import scala.collection.mutable
 
 /**
   * Created by cmathew on 11.11.16.
@@ -121,7 +122,7 @@ object AvroImplicits {
       val record: GenericRecord = deSerToGenericRecord(wSchema, rSchema)
       using(new ByteArrayOutputStream()) { out =>
         val writer: DatumWriter[GenericRecord] = new GenericDatumWriter[GenericRecord](rSchema.get)
-        val encoder: Encoder = EncoderFactory.get().jsonEncoder(rSchema.get, out, true);
+        val encoder: Encoder = EncoderFactory.get().jsonEncoder(rSchema.get, out, true)
         writer.write(record, encoder)
 
         encoder.flush()
@@ -154,6 +155,79 @@ object AvroImplicits {
   }
 
   // ------ Converters - End ------------
-}
 
+  // ------ Schema Utils - End ------------
+
+  implicit class ExtendSchemaField(field: Schema.Field) {
+    def copy: Schema.Field = {
+      val schemaClone = new Schema.Field(field.name(), field.schema().copy, field.doc(), field.defaultVal())
+      field.aliases().asScala.foreach(a => schemaClone.addAlias(a))
+      schemaClone
+    }
+  }
+
+  implicit class ExtendSchema(schema: Schema) {
+    def copy: Schema =
+      if(schema.getType == Schema.Type.RECORD)
+        Schema.createRecord(schema.getName, schema.getDoc, schema.getNamespace, false)
+      else
+        schema
+  }
+
+  implicit class SchemaUpdate(schema: Schema) {
+
+    def update(actions: List[SchemaAction]): Schema = {
+      // Currently we only update schemas of type RECORD
+      if(schema.getType != Schema.Type.RECORD) return schema
+
+      val updatedSchema: Schema = Schema.createRecord(schema.getName, schema.getDoc, schema.getNamespace, false)
+      update(actions, schema, updatedSchema, JsonPath.Root)
+      updatedSchema
+    }
+
+    def update(actions: List[SchemaAction],
+               currentSchema: Schema,
+               updatedSchema: Schema,
+               currentAvroPath: String): Unit = {
+
+      def fieldAvroPath(fieldName: String): String = currentAvroPath + "." + fieldName
+
+      if(currentSchema.getType != Schema.Type.RECORD) return
+
+      val fields = currentSchema.getFields.asScala.toList
+
+      val actionPartitions =
+        actions.
+          partition(a => fields.exists(sf => a.action match {
+            case SchemaAction.SCHEMA_ADD_ACTION => a.avroPath == currentAvroPath
+            case SchemaAction.SCHEMA_REM_ACTION => a.avroPath == fieldAvroPath(sf.name())
+            case _ => false
+          }))
+
+      val fieldsAfterRemoval = fields.filterNot(sf =>
+        actions.exists(a =>
+          a.avroPath == fieldAvroPath(sf.name()) &&
+            a.action == SchemaAction.SCHEMA_REM_ACTION))
+
+      val fieldCopiesAfterRemoval = fieldsAfterRemoval.
+        map(_.copy)
+
+
+      val fieldsAfterAddition: List[Schema.Field] =
+        fieldCopiesAfterRemoval ::: actions.filter(a =>
+          a.avroPath == currentAvroPath &&
+            a.action == SchemaAction.SCHEMA_ADD_ACTION).map(_.field.toAvroField)
+
+      updatedSchema.setFields(fieldsAfterAddition.asJava)
+
+      fieldsAfterRemoval.zip(fieldCopiesAfterRemoval).foreach(sf =>
+        update(actionPartitions._2,
+          sf._1.schema(),
+          sf._2.schema(),
+          fieldAvroPath(sf._1.name())))
+    }
+  }
+
+  // ------ Schema Utils - End ------------
+}
 
