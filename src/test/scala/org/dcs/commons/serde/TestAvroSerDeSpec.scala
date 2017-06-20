@@ -8,7 +8,7 @@ import org.dcs.data.model.{User, UserWithAge}
 
 import scala.collection.mutable
 import AvroImplicits._
-import org.apache.avro.Schema
+import org.apache.avro.{AvroRuntimeException, Schema}
 import org.apache.avro.data.Json
 import org.apache.avro.generic.{GenericData, GenericRecord}
 import JsonSerializerImplicits._
@@ -251,6 +251,8 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
 
     val upSchema3 = schemaForUser.update(List(remAddressAction))
     assert(Option(upSchema3.getField(AddressFieldName)).isEmpty)
+
+    upSchema3.update(List(remAddressAction))
   }
 
   "Avro Schema Update" should "work when adding field" in {
@@ -284,6 +286,10 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
 
     assert(upSchema2.getField(AddressFieldName).schema().getFields.size() == 3)
     assert(Option(upSchema2.getField(AddressFieldName).schema().getField(PinCodeName)).isDefined)
+
+    assertThrows[AvroRuntimeException] {
+      upSchema2.update(List(addTitleAction2, addPinCodeAction))
+    }
 
   }
 

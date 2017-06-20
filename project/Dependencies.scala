@@ -2,19 +2,18 @@ import sbt._
 
 object Dependencies {
 
-	lazy val scVersion     		= "2.11.7"
-	lazy val dcsTestVersion   = "0.1.0"
-	lazy val logbackVersion   = "1.1.3"
-	lazy val jacksonVersion   = "2.8.2"
-	lazy val avroVersion 			= "1.8.1"
-	lazy val jerseyVersion  	= "2.22.1"
-	lazy val scalaTestVersion = "2.2.6"
-	lazy val juiVersion       = "0.11"
+	lazy val scVersion     					= "2.11.7"
+	lazy val logbackVersion   			= "1.1.3"
+	lazy val jacksonVersion   			= "2.8.2"
+	lazy val avroVersion 						= "1.8.1"
+	lazy val jerseyVersion  				= "2.22.1"
+	lazy val apacheCommonsVersion   = "1.3.2"
 
-
+	lazy val mockitoVersion         = "1.10.19"
+	lazy val scalaTestVersion       = "3.0.0"
+	lazy val juiVersion             = "0.11"
 
 	// Libraries
-	val dcsTest         = "org.dcs"                          % "org.dcs.test"                       % dcsTestVersion
 	val logbackCore     = "ch.qos.logback"                   % "logback-core"                       % logbackVersion
 	val logbackClassic  =	"ch.qos.logback"                   % "logback-classic"                    % logbackVersion
 	val jksonDatabind   = "com.fasterxml.jackson.core"       % "jackson-databind"                   % jacksonVersion
@@ -24,11 +23,11 @@ object Dependencies {
 	val jksonScala      = "com.fasterxml.jackson.module"     %% "jackson-module-scala"              % jacksonVersion
 	val avro            = "org.apache.avro"                  % "avro"                               % avroVersion
 	val jerseyClient    = "org.glassfish.jersey.core"        % "jersey-client"                      % jerseyVersion
+	val apacheCommons   = "org.apache.commons"               % "commons-io"                         % apacheCommonsVersion
 
+	val mockitoAll      = "org.mockito"                      % "mockito-all"                        % mockitoVersion
 	val scalaTest       = "org.scalatest"                    %% "scalatest"                         % scalaTestVersion
 	val junitInterface  = "com.novocode"                     % "junit-interface"                    % juiVersion
-
-
 
 
 
@@ -44,7 +43,9 @@ object Dependencies {
 		jksonScala,
 		avro,
 		jerseyClient,
+		apacheCommons,
 
-		dcsTest         % "test"
+		scalaTest				% "test",
+		mockitoAll       % "test"
 	)
 }
