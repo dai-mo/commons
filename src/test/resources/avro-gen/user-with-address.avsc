@@ -1,7 +1,7 @@
 {
   "namespace": "org.dcs.data.model",
   "type": "record",
-  "name": "User",
+  "name": "UserWithAddress",
   "fields": [
     {"name": "first_name", "type": "string"},
     {"name": "middle_name",  "type": "string"},
