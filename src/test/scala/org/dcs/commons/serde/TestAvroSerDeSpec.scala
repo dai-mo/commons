@@ -226,7 +226,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
   }
 
   "Avro Schema Update" should "work when deleting field" in {
-    val schemaForUser: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-complex.avsc"))
+    val schemaForUser: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-with-address.avsc"))
 
     val MNameFieldName = "middle_name"
     val AddressFieldName = "address"
@@ -256,7 +256,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
   }
 
   "Avro Schema Update" should "work when adding field" in {
-    val schemaForUser: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-complex.avsc"))
+    val schemaForUser: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-with-address.avsc"))
 
     val TitleFieldName = "title"
     val AddressFieldName = "address"
@@ -296,7 +296,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
   "Avro Schema Update" should "work when combining addition and deletion of field" in {
 
     val schemaForUser: Schema =
-      new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-complex.avsc"))
+      new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-with-address.avsc"))
 
 
     val MNameFieldName = "middle_name"
@@ -322,7 +322,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
   "Avro Schema Path Validation" should "be consistent" in {
 
     val schemaForUser: Schema =
-      new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-complex.avsc"))
+      new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-with-address.avsc"))
 
 
     val MNameFieldName = "middle_name"
