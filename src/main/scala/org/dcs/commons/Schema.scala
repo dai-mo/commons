@@ -2,10 +2,10 @@ package org.dcs.commons
 
 import org.apache.avro.Schema
 import org.apache.avro.Schema.Type
+import org.dcs.commons.serde.JsonSerializerImplicits._
 
 import scala.beans.BeanProperty
 import scala.collection.JavaConverters._
-
 /**
   * Created by cmathew on 01.06.17.
   */
@@ -26,12 +26,12 @@ object SchemaAction {
 }
 
 object SchemaField {
-  def apply(schemaField: Schema.Field):SchemaField = {
-    new SchemaField(schemaField.name(),
-      schemaField.schema().getType.getName,
-      schemaField.doc(),
-      schemaField.defaultVal())
-  }
+//  def apply(schemaField: Schema.Field):SchemaField = {
+//    new SchemaField(schemaField.name(),
+//      schemaField.schema().getType.getName,
+//      schemaField.doc(),
+//      schemaField.defaultVal())
+//  }
 
   def validatePath(schema: Schema, schemaPath: String): Boolean = {
 
@@ -51,14 +51,27 @@ object SchemaField {
   }
 }
 case class SchemaField(@BeanProperty var name: String,
-                       @BeanProperty var schemaType: String,
+                       @BeanProperty var `type`: AnyRef,
                        @BeanProperty var doc: String,
-                       @BeanProperty var defaultValue: Object) {
-  def this() = this("", "", "", null)
-  def toAvroField = new Schema.Field(name,
-    Schema.createUnion(List(Schema.create(Schema.Type.NULL),Schema.create(SchemaAction.Primitives(schemaType))).asJava),
-    doc,
-    defaultValue)
+                       @BeanProperty var defaultValue: AnyRef) {
+  def this() = this("", null, "", null)
+
+  def toAvroField: Schema.Field = {
+
+    val schema: Schema =
+      new Schema.Parser().parse(`type`.toJson)
+
+    new Schema.Field(name,
+      schema,
+      doc,
+      defaultValue)
+  }
+}
+
+case class SchemaType(@BeanProperty var name: String,
+                      @BeanProperty var `type`: String,
+                      @BeanProperty var fields: List[SchemaField]) {
+  def this() = this("", "", Nil)
 }
 
 case class SchemaAction(@BeanProperty var action: String,

@@ -3,7 +3,7 @@
   "avroPath": "$.address",
   "field": {
     "name": "pincode",
-    "schemaType": "string",
+    "type": ["null","string"],
     "doc": "",
     "defaultValue": ""
   }

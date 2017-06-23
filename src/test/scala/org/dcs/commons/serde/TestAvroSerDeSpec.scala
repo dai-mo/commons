@@ -256,20 +256,28 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
   }
 
   "Avro Schema Update" should "work when adding field" in {
-    val schemaForUser: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user-with-address.avsc"))
+    val schemaForUser: Schema = new Schema.Parser().parse(this.getClass.getResourceAsStream("/avro-gen/user.avsc"))
 
     val TitleFieldName = "title"
     val AddressFieldName = "address"
+    val CityFieldName = "city"
     val PinCodeName = "pincode"
 
     val addTitleAction1 = SchemaAction(SchemaAction.SCHEMA_ADD_ACTION,
       JsonPath.Root,
       SchemaField(TitleFieldName, Schema.Type.STRING.getName, "", ""))
 
-    val upSchema1 = schemaForUser.update(List(addTitleAction1))
+    var upSchema = schemaForUser.update(List(addTitleAction1))
 
-    assert(upSchema1.getFields.size() == 5)
-    assert(Option(upSchema1.getField(TitleFieldName)).isDefined)
+    assert(upSchema.getFields.size() == 4)
+    assert(Option(upSchema.getField(TitleFieldName)).isDefined)
+
+    val addAddressAction =
+      this.getClass.getResourceAsStream("/avro-gen/addAddressAction.json").toObject[SchemaAction]
+
+    val upSchemaWithAddress = upSchema.update(List(addAddressAction))
+
+    assert(Option(upSchemaWithAddress.getField(AddressFieldName).schema().getField(CityFieldName)).isDefined)
 
     val addPinCodeAction = SchemaAction(SchemaAction.SCHEMA_ADD_ACTION,
       JsonPath.Root + JsonPath.Sep + AddressFieldName,
@@ -279,7 +287,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
       JsonPath.Root,
       SchemaField(TitleFieldName, Schema.Type.STRING.getName, "", ""))
 
-    val upSchema2 = schemaForUser.update(List(addTitleAction2, addPinCodeAction))
+    val upSchema2 = upSchemaWithAddress.update(List(addTitleAction2, addPinCodeAction))
 
     assert(upSchema2.getFields.size() == 5)
     assert(Option(upSchema2.getField(TitleFieldName)).isDefined)
@@ -287,9 +295,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
     assert(upSchema2.getField(AddressFieldName).schema().getFields.size() == 3)
     assert(Option(upSchema2.getField(AddressFieldName).schema().getField(PinCodeName)).isDefined)
 
-    assertThrows[AvroRuntimeException] {
-      upSchema2.update(List(addTitleAction2, addPinCodeAction))
-    }
+    upSchema2.update(List(addTitleAction2, addPinCodeAction))
 
   }
 
