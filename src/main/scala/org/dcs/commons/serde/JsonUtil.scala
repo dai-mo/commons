@@ -2,6 +2,7 @@ package org.dcs.commons.serde
 
 import java.io.InputStream
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector
 import com.fasterxml.jackson.databind.{AnnotationIntrospector, DeserializationFeature, ObjectMapper}
@@ -14,6 +15,8 @@ object JsonUtil {
   mapper.registerModule(DefaultScalaModule)
   mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
   mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
+  mapper.setSerializationInclusion(Include.NON_NULL)
+
 
   val introspector: AnnotationIntrospector  = new JaxbAnnotationIntrospector(mapper.getTypeFactory)
   val secondary: AnnotationIntrospector  = new JacksonAnnotationIntrospector
