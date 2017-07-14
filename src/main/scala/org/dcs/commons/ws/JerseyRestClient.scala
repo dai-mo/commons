@@ -9,11 +9,11 @@ import javax.ws.rs.client.Invocation.Builder
 import javax.ws.rs.client.{ClientBuilder, ClientRequestFilter, Entity}
 import javax.ws.rs.core.{MediaType, Response}
 
-import org.dcs.commons.error.{ErrorResponse, RESTException}
+import org.dcs.commons.error.{ErrorResponse, HttpErrorResponse, HttpException}
 import org.dcs.commons.serde.JsonSerializerImplicits._
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 trait JerseyRestClient extends ApiConfig {
 
@@ -36,7 +36,7 @@ trait JerseyRestClient extends ApiConfig {
     client.register(requestFilter, 100)
   }
 
-  private def responseOrError(response: Response): Either[ErrorResponse, Response] =
+  private def responseOrError(response: Response): Either[HttpErrorResponse, Response] =
     if (response.getStatus >= 400 && response.getStatus < 600)
       Left(error(response.getStatus, response.readEntity(classOf[String])))
     else
@@ -45,7 +45,7 @@ trait JerseyRestClient extends ApiConfig {
 
   private def responseOrException(response: Response): Response =
     if(response.getStatus >= 400 && response.getStatus < 600)
-      throw new RESTException(error(response.getStatus, response.readEntity(classOf[String])))
+      throw new HttpException(error(response.getStatus, response.readEntity(classOf[String])))
     else
       response
 
@@ -58,7 +58,7 @@ trait JerseyRestClient extends ApiConfig {
 
   def getAsEither(path: String,
                   queryParams: List[(String, String)] = List(),
-                  headers: List[(String, String)] = List()): Future[Either[ErrorResponse, Response]] =
+                  headers: List[(String, String)] = List()): Future[Either[HttpErrorResponse, Response]] =
     Future {
       val res: Response = response(path, queryParams, headers).get
       responseOrError(res)
@@ -83,7 +83,7 @@ trait JerseyRestClient extends ApiConfig {
                      body: T = AnyRef,
                      queryParams: List[(String, String)] = List(),
                      headers: List[(String, String)] = List(),
-                     contentType: String = MediaType.APPLICATION_JSON): Future[Either[ErrorResponse, Response]] =
+                     contentType: String = MediaType.APPLICATION_JSON): Future[Either[HttpErrorResponse, Response]] =
     Future {
       val res: Response = response(path, queryParams, headers).put(entity(body, contentType))
       responseOrError(res)
@@ -111,7 +111,7 @@ trait JerseyRestClient extends ApiConfig {
                       body: T = AnyRef,
                       queryParams: List[(String, String)] = List(),
                       headers: List[(String, String)] = List(),
-                      contentType: String = MediaType.APPLICATION_JSON): Future[Either[ErrorResponse, Response]] =
+                      contentType: String = MediaType.APPLICATION_JSON): Future[Either[HttpErrorResponse, Response]] =
     Future {
       val res: Response = response(path, queryParams, headers).post(entity(body, contentType))
       responseOrError(res)
@@ -137,7 +137,7 @@ trait JerseyRestClient extends ApiConfig {
 
   def deleteAsEither(path: String,
                      queryParams: List[(String, String)] = List(),
-                     headers: List[(String, String)] = List()): Future[Either[ErrorResponse, Response]] =
+                     headers: List[(String, String)] = List()): Future[Either[HttpErrorResponse, Response]] =
     Future {
       val res: Response = response(path, queryParams, headers).delete
       responseOrError(res)
