@@ -18,54 +18,54 @@ object ErrorConstants {
   val GlobalClientErrorCode = "DCS400"
   val GlobalDSecurityErrorCode = "DCS500"
 
-  val UnknownErrorResponse = ErrorResponse("DCS001", "Unknown error", 500)
+  val UnknownErrorResponse = ErrorResponse("DCS001", "Unknown error")
 
   /*
     General errors
    */
   val DCS001 = UnknownErrorResponse
-  val DCS002 =  ErrorResponse("DCS002", "Unexpected Error", 500)
-  val DCS003 =  ErrorResponse("DCS003", "Request is not authorised", 401)
+  val DCS002 =  ErrorResponse("DCS002", "Unexpected Error")
+  val DCS003 =  ErrorResponse("DCS003", "Request is not authorised")
 
   /*
     Data related errors
    */
-  val DCS101 = ErrorResponse("DCS101", "Datasource with given name already exists", 406)
-  val DCS102 = ErrorResponse("DCS102", "Error loading data", 500)
-  val DCS103 = ErrorResponse("DCS103", "Error initializing data store", 500)
-  val DCS104 = ErrorResponse("DCS104", "Error reading data", 500)
-  val DCS105 = ErrorResponse("DCS105", "Error writing data", 500)
-  val DCS106 = ErrorResponse("DCS106", "Error initialising data admin", 500)
-  val DCS107 = ErrorResponse("DCS107", "Error loading / retrieving data source info", 500)
-  val DCS108 = ErrorResponse("DCS108", "Requested entity is not available", 400)
+  val DCS101 = ErrorResponse("DCS101", "Datasource with given name already exists")
+  val DCS102 = ErrorResponse("DCS102", "Error loading data")
+  val DCS103 = ErrorResponse("DCS103", "Error initializing data store")
+  val DCS104 = ErrorResponse("DCS104", "Error reading data")
+  val DCS105 = ErrorResponse("DCS105", "Error writing data")
+  val DCS106 = ErrorResponse("DCS106", "Error initialising data admin")
+  val DCS107 = ErrorResponse("DCS107", "Error loading / retrieving data source info")
+  val DCS108 = ErrorResponse("DCS108", "Requested entity is not available")
 
   /*
     Service related errors
    */
-  val DCS201 = ErrorResponse("DCS201", "Service currently unavailable", 503)
+  val DCS201 = ErrorResponse("DCS201", "Service currently unavailable")
 
   /*
     Flow related errors
    */
-  val DCS301 = ErrorResponse("DCS301", "Requested entity is not available", 400)
-  val DCS302 = ErrorResponse("DCS302", "Access to flow entity is unauthorized", 401)
-  val DCS303 = ErrorResponse("DCS303", "Access to flow entity is forbidden", 403)
-  val DCS304 = ErrorResponse("DCS304", "Flow entity could not be found", 404)
-  val DCS305 = ErrorResponse("DCS305", "Invalid request to process flow entity", 409)
-  val DCS306 = ErrorResponse("DCS306", "Processor Error", 500)
+  val DCS301 = ErrorResponse("DCS301", "Requested entity is not available")
+  val DCS302 = ErrorResponse("DCS302", "Access to flow entity is unauthorized")
+  val DCS303 = ErrorResponse("DCS303", "Access to flow entity is forbidden")
+  val DCS304 = ErrorResponse("DCS304", "Flow entity could not be found")
+  val DCS305 = ErrorResponse("DCS305", "Invalid request to process flow entity")
+  val DCS306 = ErrorResponse("DCS306", "Processor Execution Error")
 
   /*
     Web client errors
    */
-  val DCS400 = ErrorResponse("DCS400", "Request is malformed", 400)
+  val DCS400 = ErrorResponse("DCS400", "Request is malformed")
 
   /*
   Security errors
  */
-  val DCS500 = ErrorResponse("DCS500", "Unkown authorisation error", 500)
-  val DCS501 = ErrorResponse("DCS501", "Access token is missing", 401)
-  val DCS502 = ErrorResponse("DCS502", "Access token is invalid", 401)
-  val DCS503 = ErrorResponse("DCS503", "Requested action is no authorised", 401)
+  val DCS500 = ErrorResponse("DCS500", "Unkown authorisation error")
+  val DCS501 = ErrorResponse("DCS501", "Access token is missing")
+  val DCS502 = ErrorResponse("DCS502", "Access token is invalid")
+  val DCS503 = ErrorResponse("DCS503", "Requested action is no authorised")
 
 }
 
