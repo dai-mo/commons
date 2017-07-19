@@ -39,6 +39,8 @@ object AvroSchemaStore {
   }
 
   def get(key: String): Option[Schema] = {
+    if(!SchemaMap.contains(key))
+      add(key)
     SchemaMap.get(key)
   }
 
