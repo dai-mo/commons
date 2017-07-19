@@ -52,7 +52,15 @@ object ErrorConstants {
   val DCS303 = ErrorResponse("DCS303", "Access to flow entity is forbidden")
   val DCS304 = ErrorResponse("DCS304", "Flow entity could not be found")
   val DCS305 = ErrorResponse("DCS305", "Invalid request to process flow entity")
-  val DCS306 = ErrorResponse("DCS306", "Processor Execution Error")
+  val DCS306 = ErrorResponse("DCS306", "Processor Validation Error")
+  val DCS307 = ErrorResponse("DCS307", "Missing Processor Input Schema")
+  val DCS308 = ErrorResponse("DCS308", "Missing Processor Output Schema")
+  val DCS309 = ErrorResponse("DCS309", "Missing Processor Schema Field")
+  val DCS310 = ErrorResponse("DCS310", "Invalid Processor Schema Field Path")
+  val DCS311 = ErrorResponse("DCS311", "Invalid Processor Schema Field Type")
+  val DCS312 = ErrorResponse("DCS312", "Empty Processor Schema Property")
+  val DCS313 = ErrorResponse("DCS313", "Missing Required Processor Property")
+  val DCS314 = ErrorResponse("DCS314", "Empty Required Processor Property")
 
   /*
     Web client errors

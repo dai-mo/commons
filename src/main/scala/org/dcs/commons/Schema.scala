@@ -26,29 +26,28 @@ object SchemaAction {
 }
 
 object SchemaField {
-//  def apply(schemaField: Schema.Field):SchemaField = {
-//    new SchemaField(schemaField.name(),
-//      schemaField.schema().getType.getName,
-//      schemaField.doc(),
-//      schemaField.defaultVal())
-//  }
 
-  def validatePath(schema: Schema, schemaPath: String): Boolean = {
+  def validatePath(schema: Schema, schemaPath: String): Boolean =
+    find(schema, schemaPath).isDefined
 
-    def validatePath(currentSchema: Schema, path:List[String]): Boolean = path match {
-      case Nil  => if(currentSchema.getType != Schema.Type.RECORD) true else false
-      case _ if currentSchema.getType != Schema.Type.RECORD  => false
-      case _ => {
-        val field = currentSchema.getField(path.head)
-        if(field  == null)
-          false
+
+  def find(schema: Schema, schemaPath: String): Option[Schema.Field] = {
+
+    def find(currentSchema: Schema, path:List[String]): Option[Schema.Field] = path match {
+      case Nil => None
+      case last :: Nil  =>
+        if(currentSchema.getType == Schema.Type.RECORD)
+          Option(currentSchema.getField(last))
         else
-          validatePath(field.schema(), path.tail)
-      }
+          None
+      case _ if currentSchema.getType != Schema.Type.RECORD  => None
+      case _ => Option(currentSchema.getField(path.head)).flatMap(sf => find(sf.schema(), path.tail))
     }
 
-    validatePath(schema, schemaPath.split("\\.").toList.tail)
+    find(schema, schemaPath.split("\\.").toList.tail)
   }
+
+
 }
 case class SchemaField(@BeanProperty var name: String,
                        @BeanProperty var `type`: AnyRef,
