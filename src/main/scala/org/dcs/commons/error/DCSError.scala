@@ -38,6 +38,10 @@ case class ErrorResponse(code: String,
   def validation(validationInfo: List[Map[String, String]]): ValidationErrorResponse = {
     ValidationErrorResponse(this.code, this.message, this.description, validationInfo)
   }
+
+  def exception(): DCSException = {
+    new DCSException(this)
+  }
 }
 
 object HttpErrorResponse {

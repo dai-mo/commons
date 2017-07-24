@@ -61,6 +61,8 @@ object ErrorConstants {
   val DCS312 = ErrorResponse("DCS312", "Empty Processor Schema Property")
   val DCS313 = ErrorResponse("DCS313", "Missing Required Processor Property")
   val DCS314 = ErrorResponse("DCS314", "Empty Required Processor Property")
+  val DCS315 = ErrorResponse("DCS315", "Invalid Connection")
+  val DCS316 = ErrorResponse("DCS316", "Missing Entity Information")
 
   /*
     Web client errors
