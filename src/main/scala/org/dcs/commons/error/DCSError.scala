@@ -122,7 +122,9 @@ object ValidationErrorResponse {
 case class ValidationErrorResponse(@BeanProperty var code: String,
                                    @BeanProperty var message: String,
                                    @BeanProperty var description: String = "",
-                                   @BeanProperty var validationInfo: List[Map[String, String]])
+                                   @BeanProperty var validationInfo: List[Map[String, String]]) {
+  def this() = this("","", "", Nil)
+}
 
 
 //case class ProcessorSchemaValidation(processorName: String,
