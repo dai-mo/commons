@@ -127,21 +127,6 @@ case class ValidationErrorResponse(@BeanProperty var code: String,
 }
 
 
-//case class ProcessorSchemaValidation(processorName: String,
-//                                     processorId: String)
-//
-//case class ProcessorSchemaFieldValidation(processorName: String,
-//                                          processorId: String,
-//                                          schemaPropertyName: String,
-//                                          schemaFieldName: String,
-//                                          jsonPath: String,
-//                                          fieldType: String)
-//
-//case class ProcessorPropertyValidation(processorName: String,
-//                                       processorId: String,
-//                                       propertyName: String,
-//                                       propertyType: String)
-
 class DCSException(val errorResponse: ErrorResponse)
   extends Exception(errorResponse.code + ":" +
     errorResponse.message + ":" +

@@ -10,6 +10,7 @@ import org.apache.avro.io._
 import org.apache.avro.specific.{SpecificDatumReader, SpecificDatumWriter}
 import org.dcs.commons.Control._
 import org.dcs.commons.SchemaAction
+import org.dcs.commons.apache.avro.io.StdJsonDecoder
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -144,13 +145,16 @@ object AvroImplicits {
 
   // ------ Converters - Start ----------
 
+
+  /**
+    * Using a custom json decoder - for more details refer [[org.dcs.commons.apache.avro.io.StdJsonDecoder]]
+    */
   implicit class JsonStringSer(jsonStr: String) {
-    def toGenericRecord(schema: Option[Schema]): GenericRecord = {
-      using(new ByteArrayInputStream(jsonStr.getBytes())) { in =>
-        val reader: DatumReader[GenericRecord] = new GenericDatumReader[GenericRecord](schema.get)
-        val decoder: Decoder = DecoderFactory.get().jsonDecoder(schema.get, in)
-        reader.read(null, decoder)
-      }
+    def toGenericRecord(schema: Option[Schema]): GenericRecord = using(new ByteArrayInputStream(jsonStr.getBytes())) { in =>
+      val reader = new GenericDatumReader[GenericRecord](schema.get)
+      //val decoder: Decoder = DecoderFactory.get().jsonDecoder(schema.get, in)
+      val decoder: Decoder = new StdJsonDecoder(schema.get, in)
+      reader.read(null, decoder)
     }
   }
 

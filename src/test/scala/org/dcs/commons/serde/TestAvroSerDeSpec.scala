@@ -196,11 +196,7 @@ class TestAvroSerDeSpec extends CommonsUnitSpec {
 
     val json = IOUtils.toString(this.getClass.getResourceAsStream("/user.json"), "UTF-8")
 
-    val bytes = json.serToBytes(Some(schemaForUser))
-
-    val data = bytes.deSerToJsonString(Some(schemaForUser), Some(schemaForUser))
-
-    assertUser(data.toGenericRecord(Some(schemaForUser)))
+    assertUser(json.toGenericRecord(Some(schemaForUser)))
   }
 
   "Arbitrary Json Avro Ser De" should "be valid for aribtrary json" in {
