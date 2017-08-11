@@ -1,0 +1,10 @@
+{
+  "namespace": "org.dcs.test",
+  "type": "record",
+  "name": "Person",
+  "fields": [
+    {"name": "name", "type": "string"},
+    {"name": "age", "type": "int", "default": null},
+    {"name": "gender", "type": "string", "default": null}
+  ]
+}

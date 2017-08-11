@@ -3,9 +3,11 @@ package org.dcs.commons.serde
 import java.io.InputStream
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include
-import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.core.{JsonGenerator, JsonParser}
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector
-import com.fasterxml.jackson.databind.{AnnotationIntrospector, DeserializationFeature, ObjectMapper}
+import com.fasterxml.jackson.databind.module.SimpleModule
+import com.fasterxml.jackson.databind.ser.std.StdSerializer
+import com.fasterxml.jackson.databind.{AnnotationIntrospector, DeserializationFeature, ObjectMapper, SerializerProvider}
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
@@ -16,6 +18,10 @@ object JsonUtil {
   mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
   mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
   mapper.setSerializationInclusion(Include.NON_NULL)
+
+  val module: SimpleModule = new SimpleModule()
+  module.addSerializer(classOf[org.apache.avro.JsonProperties.Null], new AvroJsonNullSerializer)
+  mapper.registerModule(module)
 
 
   val introspector: AnnotationIntrospector  = new JaxbAnnotationIntrospector(mapper.getTypeFactory)
@@ -54,4 +60,19 @@ object JsonUtil {
 object JsonPath {
   val Root = "$"
   val Sep = "."
+}
+
+
+
+
+class AvroJsonNullSerializer(t: Class[org.apache.avro.JsonProperties.Null])
+  extends StdSerializer[org.apache.avro.JsonProperties.Null](t) {
+
+  def this() = this(null)
+
+  def serialize(value: org.apache.avro.JsonProperties.Null,
+                jgen:  JsonGenerator,
+                provider: SerializerProvider): Unit = {
+    jgen.writeNull()
+  }
 }

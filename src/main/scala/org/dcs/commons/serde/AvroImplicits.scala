@@ -1,6 +1,6 @@
 package org.dcs.commons.serde
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, File}
+import java.io._
 
 import org.apache.avro.Schema
 import org.apache.avro.data.Json
@@ -54,6 +54,18 @@ object AvroImplicits {
       }
     }
 
+    def serToOutputStream(os: OutputStream, schema: Option[Schema] = None): Unit = obj match {
+      case record: GenericRecord =>
+      using(os) { out =>
+        val sc = schema.getOrElse(Json.SCHEMA)
+        val encoder: BinaryEncoder = EncoderFactory.get().binaryEncoder(out, null)
+        val writer: DatumWriter[GenericRecord] = new GenericDatumWriter[GenericRecord](sc)
+        writer.write(record, encoder)
+        encoder.flush()
+      }
+      case _ =>
+    }
+
     def serToBytes(schema: Option[Schema] = None): Array[Byte] = obj match {
       case jsonString: String =>
         if(schema.isDefined)
@@ -104,6 +116,20 @@ object AvroImplicits {
       genData(dataFileReader)
     }
   }
+
+  implicit class InputStreamDeSer(in: InputStream) {
+
+    def deSerToGenericRecord(wSchema: Option[Schema], rSchema: Option[Schema]): GenericRecord = {
+      val reader = new GenericDatumReader[GenericRecord](wSchema.get, rSchema.get)
+      val decoder: Decoder = DecoderFactory.get().binaryDecoder(in, null)
+      reader.read(null.asInstanceOf[GenericRecord], decoder)
+    }
+
+    def deSerToGenericRecord(): GenericRecord = {
+      deSerToGenericRecord(Some(Json.SCHEMA), Some(Json.SCHEMA))
+    }
+  }
+
 
   implicit class ByteArrayDeSer(bytes: Array[Byte]) {
 
