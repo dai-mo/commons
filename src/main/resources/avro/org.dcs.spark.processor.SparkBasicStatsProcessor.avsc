@@ -1,0 +1,8 @@
+{
+  "namespace": "org.dcs.spark.processor",
+  "type": "record",
+  "name": "BasicStats",
+  "fields": [
+    {"name": "average", "type": {"type": "map", "values": "double"}}
+  ]
+}

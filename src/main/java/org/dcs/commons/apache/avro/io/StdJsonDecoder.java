@@ -137,7 +137,8 @@ public class StdJsonDecoder extends ParsingDecoder
   @Override
   public void readNull() throws IOException {
     advance(Symbol.NULL);
-    if (in.getCurrentToken() == JsonToken.VALUE_NULL) {
+    // FIXME: Workaround when schema field is not present in input
+    if (in.getCurrentToken() == null || in.getCurrentToken() == JsonToken.VALUE_NULL) {
       in.nextToken();
     } else {
       throw error("null");
@@ -470,7 +471,8 @@ public class StdJsonDecoder extends ParsingDecoder
         Symbol.Alternative a = (Symbol.Alternative) parser.popSymbol();
 
         String label;
-        if (in.getCurrentToken() == JsonToken.VALUE_NULL) {
+        // FIXME: Workaround when schema field is not present in input
+        if (in.getCurrentToken() == null || in.getCurrentToken() == JsonToken.VALUE_NULL) {
           label = "null";
         } else if (isNullableSingle(a)) {
           label = getNullableSingle(a);
@@ -521,7 +523,9 @@ public class StdJsonDecoder extends ParsingDecoder
             currentReorderBuffer.savedFields.put(fn, getVaueAsTree(in));
           }
         } while (in.getCurrentToken() == JsonToken.FIELD_NAME);
-        throw new AvroTypeException("Expected field name not found: " + fa.fname);
+        // FIXME: Workaround when schema field is not present in input
+        in.nextToken();
+        // throw new AvroTypeException("Expected field name not found: " + fa.fname);
       }
     } else if (top == Symbol.FIELD_END) {
       if (currentReorderBuffer != null && currentReorderBuffer.origParser != null) {
