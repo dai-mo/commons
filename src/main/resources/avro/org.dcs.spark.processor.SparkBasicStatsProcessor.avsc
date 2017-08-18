@@ -3,6 +3,7 @@
   "type": "record",
   "name": "BasicStats",
   "fields": [
+    {"name": "count", "type": "int", "default": 0},
     {"name": "average", "type": {"type": "map", "values": "double"}}
   ]
 }

@@ -4,7 +4,7 @@
   "name": "Person",
   "fields": [
     {"name": "name", "type": "string"},
-    {"name": "age", "type": "int", "default": null},
+    {"name": "age", "type": "int", "default": 0},
     {"name": "gender", "type": "string", "default": null}
   ]
 }
