@@ -6,6 +6,7 @@ object Dependencies {
 	lazy val logbackVersion   			= "1.1.3"
 	lazy val jacksonVersion   			= "2.8.2"
 	lazy val avroVersion 						= "1.8.1"
+	lazy val avro4sVersion          = "1.7.0"
 	lazy val jerseyVersion  				= "2.22.1"
 	lazy val apacheCommonsVersion   = "1.3.2"
 
@@ -22,6 +23,7 @@ object Dependencies {
 	val jksonJaxb				= "com.fasterxml.jackson.module"		 % "jackson-module-jaxb-annotations"		% jacksonVersion
 	val jksonScala      = "com.fasterxml.jackson.module"     %% "jackson-module-scala"              % jacksonVersion
 	val avro            = "org.apache.avro"                  % "avro"                               % avroVersion
+	val avro4s          = "com.sksamuel.avro4s"              %% "avro4s-core"                       % avro4sVersion
 	val jerseyClient    = "org.glassfish.jersey.core"        % "jersey-client"                      % jerseyVersion
 	val apacheCommons   = "org.apache.commons"               % "commons-io"                         % apacheCommonsVersion
 
@@ -41,11 +43,12 @@ object Dependencies {
 		jksonDataFormat,
 		jksonJaxb,
 		jksonScala,
-		avro,
+	  avro,
+		avro4s          % "test",
 		jerseyClient,
 		apacheCommons,
 
 		scalaTest				% "test",
-		mockitoAll       % "test"
+		mockitoAll      % "test"
 	)
 }
