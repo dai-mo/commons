@@ -1,5 +1,5 @@
 {
-  "namespace": "org.dcs.spark.processor",
+  "namespace": "org.dcs.core.processor",
   "type": "record",
   "name": "BasicStats",
   "fields": [
