@@ -9,15 +9,31 @@ import javax.ws.rs.client.Invocation.Builder
 import javax.ws.rs.client.{ClientBuilder, ClientRequestFilter, Entity}
 import javax.ws.rs.core.{MediaType, Response}
 
-import org.dcs.commons.error.{ErrorResponse, HttpErrorResponse, HttpException}
+import org.dcs.commons.error.{HttpErrorResponse, HttpException}
 import org.dcs.commons.serde.JsonSerializerImplicits._
+import org.glassfish.jersey.filter.LoggingFilter
+import org.slf4j.{Logger, LoggerFactory}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+object JerseyRestClient {
+  private val LOG:Logger = LoggerFactory.getLogger(classOf[JerseyRestClient].getName)
+}
+
 trait JerseyRestClient extends ApiConfig {
+  import JerseyRestClient._
+
+  class JulFacade extends java.util.logging.Logger("Jersey", null) {
+    override def info(msg: String): Unit = {
+      LOG.info(msg)
+    }
+  }
 
   val client = ClientBuilder.newClient()
+
+  requestFilter(new LoggingFilter(new JulFacade, true))
+  requestFilter(new DetailedLoggingFilter)
 
   def response(path: String,
                queryParams: List[(String, String)]  = List(),
