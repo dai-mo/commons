@@ -25,6 +25,7 @@ object Dependencies {
 	val avro            = "org.apache.avro"                  % "avro"                               % avroVersion
 	val avro4s          = "com.sksamuel.avro4s"              %% "avro4s-core"                       % avro4sVersion
 	val jerseyClient    = "org.glassfish.jersey.core"        % "jersey-client"                      % jerseyVersion
+	val jerseyMultipart = "org.glassfish.jersey.media"       % "jersey-media-multipart"             % jerseyVersion
 	val apacheCommons   = "org.apache.commons"               % "commons-io"                         % apacheCommonsVersion
 
 	val mockitoAll      = "org.mockito"                      % "mockito-all"                        % mockitoVersion
@@ -46,6 +47,7 @@ object Dependencies {
 	  avro,
 		avro4s          % "test",
 		jerseyClient,
+		jerseyMultipart,
 		apacheCommons,
 
 		scalaTest				% "test",
