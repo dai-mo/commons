@@ -5,13 +5,18 @@ package org.dcs.commons.ws
   * Created by cmathew on 13.11.16.
   */
 
+import java.io.File
 import javax.ws.rs.client.Invocation.Builder
 import javax.ws.rs.client.{ClientBuilder, ClientRequestFilter, Entity}
 import javax.ws.rs.core.{MediaType, Response}
 
 import org.dcs.commons.error.{HttpErrorResponse, HttpException}
 import org.dcs.commons.serde.JsonSerializerImplicits._
+import org.glassfish.jersey.client.ClientResponse
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature
 import org.glassfish.jersey.filter.LoggingFilter
+import org.glassfish.jersey.media.multipart.{FormDataContentDisposition, FormDataMultiPart, MultiPartFeature}
+import org.glassfish.jersey.media.multipart.file.FileDataBodyPart
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -19,7 +24,9 @@ import scala.concurrent.Future
 
 object JerseyRestClient {
   private val LOG:Logger = LoggerFactory.getLogger(classOf[JerseyRestClient].getName)
+
 }
+
 
 trait JerseyRestClient extends ApiConfig {
   import JerseyRestClient._
@@ -31,15 +38,24 @@ trait JerseyRestClient extends ApiConfig {
   }
 
   val client = ClientBuilder.newClient()
+  client.register(classOf[MultiPartFeature])
 
   requestFilter(new LoggingFilter(new JulFacade, true))
   requestFilter(new DetailedLoggingFilter)
+
+
+
+  def auth(user: String, password: String): Unit = {
+    client.register(HttpAuthenticationFeature.basic(user, password), 100)
+  }
 
   def response(path: String,
                queryParams: List[(String, String)]  = List(),
                headers: List[(String, String)]= List()
               ): Builder = {
+
     var target = client.target(baseUrl)
+
     if(queryParams.nonEmpty)  queryParams.foreach(x => target = target.queryParam(x._1, x._2))
 
     var builder = target.path(path).request
@@ -66,9 +82,13 @@ trait JerseyRestClient extends ApiConfig {
       response
 
 
-  private def entity[T](obj: T, contentType: String): Entity[String] = contentType match {
-    case MediaType.APPLICATION_JSON => Entity.entity(obj.toJson, contentType)
-    case _ => Entity.entity(obj.toString, contentType)
+  private def entity[T](obj: T, contentType: String): Entity[String] =
+    Entity.entity(stringify(obj, contentType), contentType)
+
+  private def stringify[T](obj: T, contentType: String): String = (obj, contentType) match {
+    case (json: String, MediaType.APPLICATION_JSON) => json
+    case (_, MediaType.APPLICATION_JSON) => obj.toJson
+    case _ => obj.toString
   }
 
 
@@ -149,6 +169,25 @@ trait JerseyRestClient extends ApiConfig {
                     headers: List[(String, String)] = List(),
                     contentType: String = MediaType.APPLICATION_JSON): Future[String] = {
     post(path, body, queryParams, headers, contentType).map(_.readEntity(classOf[String]))
+  }
+
+  def postFileAsJson[T](path: String,
+                        file: File,
+                        field: String = "",
+                        body: T = AnyRef,
+                        queryParams: List[(String, String)] = List(),
+                        headers: List[(String, String)] = List(),
+                        contentType: String = MediaType.APPLICATION_JSON): Future[String] = {
+
+    val filePart = new FileDataBodyPart("file", file, MediaType.APPLICATION_OCTET_STREAM_TYPE)
+    val multiPart = new FormDataMultiPart()
+      .field(field, stringify(body, contentType), MediaType.APPLICATION_JSON_TYPE)
+      .bodyPart(filePart)
+    multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE)
+    Future {
+      val res: Response = response(path, queryParams, headers).post(Entity.entity(multiPart, MediaType.MULTIPART_FORM_DATA))
+      responseOrException(res)
+    }.map(_.readEntity(classOf[String]))
   }
 
   def deleteAsEither(path: String,
