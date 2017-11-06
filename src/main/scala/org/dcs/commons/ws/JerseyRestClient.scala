@@ -12,11 +12,10 @@ import javax.ws.rs.core.{MediaType, Response}
 
 import org.dcs.commons.error.{HttpErrorResponse, HttpException}
 import org.dcs.commons.serde.JsonSerializerImplicits._
-import org.glassfish.jersey.client.ClientResponse
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature
 import org.glassfish.jersey.filter.LoggingFilter
-import org.glassfish.jersey.media.multipart.{FormDataContentDisposition, FormDataMultiPart, MultiPartFeature}
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart
+import org.glassfish.jersey.media.multipart.{FormDataMultiPart, MultiPartFeature}
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -38,7 +37,7 @@ trait JerseyRestClient extends ApiConfig {
   }
 
   val client = ClientBuilder.newClient()
-  client.register(classOf[MultiPartFeature])
+  // client.register(classOf[MultiPartFeature])
 
   requestFilter(new LoggingFilter(new JulFacade, true))
   requestFilter(new DetailedLoggingFilter)
@@ -171,24 +170,27 @@ trait JerseyRestClient extends ApiConfig {
     post(path, body, queryParams, headers, contentType).map(_.readEntity(classOf[String]))
   }
 
-  def postFileAsJson[T](path: String,
-                        file: File,
-                        field: String = "",
-                        body: T = AnyRef,
-                        queryParams: List[(String, String)] = List(),
-                        headers: List[(String, String)] = List(),
-                        contentType: String = MediaType.APPLICATION_JSON): Future[String] = {
+  // FIXME: File Upload a.k.a Posting MultiPart is not part of jax-rs
+  //        which means that each library (e.g.) has its own implementation
 
-    val filePart = new FileDataBodyPart("file", file, MediaType.APPLICATION_OCTET_STREAM_TYPE)
-    val multiPart = new FormDataMultiPart()
-      .field(field, stringify(body, contentType), MediaType.APPLICATION_JSON_TYPE)
-      .bodyPart(filePart)
-    multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE)
-    Future {
-      val res: Response = response(path, queryParams, headers).post(Entity.entity(multiPart, MediaType.MULTIPART_FORM_DATA))
-      responseOrException(res)
-    }.map(_.readEntity(classOf[String]))
-  }
+//  def postFileAsJson[T](path: String,
+//                        file: File,
+//                        field: String = "",
+//                        body: T = AnyRef,
+//                        queryParams: List[(String, String)] = List(),
+//                        headers: List[(String, String)] = List(),
+//                        contentType: String = MediaType.APPLICATION_JSON): Future[String] = {
+//
+//    val filePart = new FileDataBodyPart("file", file, MediaType.APPLICATION_OCTET_STREAM_TYPE)
+//    val multiPart = new FormDataMultiPart()
+//      .field(field, stringify(body, contentType), MediaType.APPLICATION_JSON_TYPE)
+//      .bodyPart(filePart)
+//    multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE)
+//    Future {
+//      val res: Response = response(path, queryParams, headers).post(Entity.entity(multiPart, MediaType.MULTIPART_FORM_DATA))
+//      responseOrException(res)
+//    }.map(_.readEntity(classOf[String]))
+//  }
 
   def deleteAsEither(path: String,
                      queryParams: List[(String, String)] = List(),

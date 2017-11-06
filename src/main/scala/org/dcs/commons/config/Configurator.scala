@@ -50,9 +50,14 @@ object Configurator {
             customConfigFilePropertyKey: String): Configurator =
     new Configurator(Some(defaultConfigFilePath),
       Some(customConfigFilePropertyKey))
+
+  def apply(configKey: String): Configurator =
+    new Configurator(Some("/" + configKey + ".yaml"), Some(configKey))
 }
 
 object GlobalConfigurator extends Configurator(Some("/config.yaml"), Some("config"))
+
+
 
 class GlobalConfiguration {
   var zookeeperServers = "localhost:2181"
