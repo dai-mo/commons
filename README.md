@@ -111,11 +111,12 @@ Please read [CONTRIBUTING.md] for details on our code of conduct, and the proces
 * **Cherian Mathew** - [brewlabs]
 * **Laurent Briais** - [brewlabs]
 
+See also the list of [contributors] who participated in this project.
+
 # Acknowledgments
 Thanks to,
 * [Jeoren Rosenberg's blog post] which inspired the JSON / YAML (de)serialisation
 
-See also the list of [contributors] who participated in this project.
 
 # License
 This project is licensed under the ??? License - see the [LICENSE.md] file for details
