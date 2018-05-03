@@ -9,7 +9,11 @@ pipeline:
       - ~/.m2
     volumes:
       - /tmp/cache:/cache
-  api:
+  commons-gen-sources:
+    image: maven:3.5-alpine
+    commands:
+      - mvn generate-sources
+  commons:
     image: bigtruedata/sbt:0.13.15-2.11.8
     commands:
       - sbt clean test publishM2
