@@ -4,9 +4,9 @@ pipeline:
     image: drillster/drone-volume-cache
     restore: true
     mount:
-      - ~/.sbt
-      - ~/.ivy2
-      - ~/.m2
+      - /root/.sbt
+      - /root/.ivy2
+      - /root/.m2
     volumes:
       - /tmp/cache:/cache
   commons-gen-sources:
@@ -22,9 +22,9 @@ pipeline:
     image: drillster/drone-volume-cache
     rebuild: true
     mount:
-      - ~/.sbt
-      - ~/.ivy2
-      - ~/.m2
+      - /root/.sbt
+      - /root/.ivy2
+      - /root/.m2
     volumes:
       - /tmp/cache:/cache
   artifactory:
