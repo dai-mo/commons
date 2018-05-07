@@ -4,9 +4,8 @@ pipeline:
     image: drillster/drone-volume-cache
     restore: true
     mount:
-      - /root/.sbt
-      - /root/.ivy2
-      - /root/.m2
+      - .ivy2
+      - .m2
     volumes:
       - /tmp/cache:/cache
   commons-gen-sources:
@@ -16,16 +15,17 @@ pipeline:
   commons:
     image: bigtruedata/sbt:0.13.15-2.11.8
     commands:
-      - sbt clean test publishM2
-    secrets: [ artifactory_url, artifactory_username, artifactory_password ]
+      - mkdir -p ~/.sbt/0.13
+      - cp global.sbt ~/.sbt/0.13
+      - sbt -Dsbt.ivy.home=./.ivy2 clean test publishM2
+    secrets: [ artifactory_host, artifactory_url, artifactory_username, artifactory_password ]
   rebuild-cache:
     image: drillster/drone-volume-cache
     rebuild: true
     mount:
-      - /root/.sbt
-      - /root/.ivy2
-      - /root/.m2
-    volumes:
+      - .ivy2
+      - .m2
+    volumes:  
       - /tmp/cache:/cache
   artifactory:
     image: athieriot/drone-artifactory
@@ -33,14 +33,21 @@ pipeline:
       - DRONE_VERSION=0.8
     group_id: org.dcs
     artifact_id: org.dcs.commons
-    version: 0.5.0-SNAPSHOT
-    pom: target/org.dcs.commons-0.5.0-SNAPSHOT.pom
+    version: 0.4.0-SNAPSHOT
+    pom: target/org.dcs.commons-0.4.0-SNAPSHOT.pom
     files:
       - target/*.jar
     force_upload: true
     secrets: [ artifactory_url, artifactory_username, artifactory_password ]
+    when:
+      branch: master
+      status: [ success ]
   slack:
     image: plugins/slack
-    channel: cados-builds
+    channel: builds
     secrets: [ slack_webhook ]
+    when:
+      branch: master
+      status: [ success, failure ]
+
 
