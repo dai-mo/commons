@@ -48,10 +48,10 @@ public class StdJsonDecoder extends ParsingDecoder
         implements Parser.ActionHandler {
   private JsonParser in;
   private static JsonFactory jsonFactory = new JsonFactory();
-  Stack<ReorderBuffer> reorderBuffers = new Stack<ReorderBuffer>();
+  Stack<ReorderBuffer> reorderBuffers = new Stack<>();
   ReorderBuffer currentReorderBuffer;
 
-  private static class ReorderBuffer {
+  protected static class ReorderBuffer {
     public Map<String, List<JsonElement>> savedFields = new HashMap<String, List<JsonElement>>();
     public JsonParser origParser = null;
   }
@@ -558,7 +558,7 @@ public class StdJsonDecoder extends ParsingDecoder
     return null;
   }
 
-  private static class JsonElement {
+  protected static class JsonElement {
     public final JsonToken token;
     public final String value;
     public JsonElement(JsonToken t, String value) {

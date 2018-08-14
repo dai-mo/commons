@@ -40,3 +40,5 @@ object YamlUtil {
     mapper.readValue[T](file)
   }
 }
+
+class YamlUtil {}

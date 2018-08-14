@@ -14,6 +14,8 @@ lazy val commons = OsgiProject(commonsProjectID, commonsProjectName, commonsProj
   settings(Seq(unmanagedSourceDirectories in Compile += baseDirectory.value / "generated" / "src" / "main" / "java",
     unmanagedSourceDirectories in Test += baseDirectory.value / "generated" / "src" / "test" / "java"))
 
+
+
 // ------- Versioning , Release Section --------
 
 // Build Info
