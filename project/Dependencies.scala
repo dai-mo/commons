@@ -4,7 +4,7 @@ object Dependencies {
 
 	lazy val scVersion     					= "2.11.7"
 	lazy val logbackVersion   			= "1.1.3"
-	lazy val jacksonVersion   			= "2.8.2"
+	lazy val jacksonVersion   			= "2.8.10"
 	lazy val avroVersion 						= "1.8.1"
 	lazy val avro4sVersion          = "1.7.0"
 	lazy val jerseyVersion  				= "2.22.1"
