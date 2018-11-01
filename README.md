@@ -1,4 +1,4 @@
-# Alambeek Commons Library
+# Daimo Commons Library
 
 This library brings together all the common utilities required by various components of the Daimo platform.
 
